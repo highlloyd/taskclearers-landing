@@ -1,0 +1,19 @@
+# macOS
+.DS_Store
+.DS_Store:Zone.Identifier
+
+# Editor directories and files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Temporary files
+*.tmp
+.cache/
