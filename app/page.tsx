@@ -223,7 +223,7 @@ export default function App() {
                 icon: PhoneCall,
                 step: "01",
                 title: "Book a Discovery Call",
-                desc: "In a brief 15-minute chat, tell us about your bottlenecks and the tools you use."
+                desc: "In a brief 30-minute chat, tell us about your bottlenecks and the tools you use."
               },
               {
                 icon: UserCheck,
@@ -235,7 +235,7 @@ export default function App() {
                 icon: Zap,
                 step: "03",
                 title: "Start Clearing Tasks",
-                desc: "Your new team member will join your Slack and begin working efficiently within 24 hours."
+                desc: "Your new team member will join your Slack and begin working efficiently within a week."
               }
             ].map((item, idx, arr) => (
               <div key={item.step} className="relative flex flex-col gap-6 rounded-3xl bg-white/90 p-8 shadow-lg shadow-gray-200/60 border border-white/70 backdrop-blur">
@@ -323,34 +323,39 @@ export default function App() {
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Why we win against the alternatives</h2>
           </div>
           
-          <div className="overflow-x-auto pb-4">
-            <div className="min-w-[700px] bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-              <div className="grid grid-cols-4 p-6 bg-gray-50 border-b border-gray-100 font-bold text-gray-700">
-                <div className="col-span-1">Comparison</div>
-                <div className="col-span-1 text-center text-green-700 bg-green-50/50 -mx-4 py-3 rounded-t-xl border-t border-x border-green-100 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.02)]">Taskclearers</div>
-                <div className="col-span-1 text-center text-gray-400">Freelance Sites</div>
-                <div className="col-span-1 text-center text-gray-400">Traditional Hiring</div>
-              </div>
+          <div className="mx-auto">
+            <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden relative">
+              {/* Green Highlight Background */}
+              <div className="absolute top-0 left-1/4 w-1/4 h-full bg-green-50 z-0"></div>
 
-              {[
-                { feature: "Time to Start", us: "3-5 Days", them1: "1-3 Weeks", them2: "2-3 Months" },
-                { feature: "Vetting Quality", us: "Top 1% Pre-Vetted", them1: "Hit or Miss", them2: "High (Time Consuming)" },
-                { feature: "Management", us: "Success Manager Included", them1: "Self-Managed", them2: "HR Heavy" },
-                { feature: "Replacement Cost", us: "Free & Immediate", them1: "Lost Time/Money", them2: "Expensive Severance" },
-                { feature: "Training Required", us: "Minimal (Tool Ready)", them1: "Varies", them2: "Extensive" }
-              ].map((row, i) => (
-                <div key={i} className="grid grid-cols-4 p-6 border-b border-gray-100 hover:bg-gray-50 transition-colors items-center relative">
-                   <div className="col-span-1 font-semibold text-gray-800">{row.feature}</div>
-                   
-                   {/* Highlighted 'Our Company' Column */}
-                   <div className="col-span-1 text-center font-bold text-green-800 bg-green-50/50 py-4 -my-6 -mx-4 border-x border-green-100 flex items-center justify-center h-[calc(100%+3rem)] relative z-10 shadow-sm">
-                      {row.us}
-                   </div>
-                   
-                   <div className="col-span-1 text-center text-gray-500">{row.them1}</div>
-                   <div className="col-span-1 text-center text-gray-500">{row.them2}</div>
+              <div className="relative z-10">
+                {/* Table Header */}
+                <div className="grid grid-cols-4 items-center p-5 bg-transparent border-b border-gray-200">
+                  <div className="font-bold text-gray-800">Comparison</div>
+                  <div className="text-center font-bold text-green-700">Taskclearers</div>
+                  <div className="text-center font-semibold text-gray-500">Freelance Sites</div>
+                  <div className="text-center font-semibold text-gray-500">Traditional Hiring</div>
                 </div>
-              ))}
+
+                {/* Table Body */}
+                {[
+                  { feature: "Time to Start", us: "3-5 Days", them1: "1-3 Weeks", them2: "2-3 Months" },
+                  { feature: "Vetting Quality", us: "Top 1% Pre-Vetted", them1: "Hit or Miss", them2: "High (Time Consuming)" },
+                  { feature: "Management", us: "Success Manager Included", them1: "Self-Managed", them2: "HR Heavy" },
+                  { feature: "Replacement Cost", us: "Free & Immediate", them1: "Lost Time/Money", them2: "Expensive Severance" },
+                  { feature: "Training Required", us: "Minimal (Tool Ready)", them1: "Varies", them2: "Extensive" }
+                ].map((row, i, arr) => (
+                  <div
+                    key={i}
+                    className={`grid grid-cols-4 items-center p-5 transition-colors hover:bg-gray-50/50 ${i < arr.length - 1 ? 'border-b border-gray-100' : ''}`}
+                  >
+                    <div className="font-semibold text-gray-800">{row.feature}</div>
+                    <div className="text-center font-bold text-green-800">{row.us}</div>
+                    <div className="text-center text-gray-600">{row.them1}</div>
+                    <div className="text-center text-gray-600">{row.them2}</div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
