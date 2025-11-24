@@ -141,19 +141,30 @@ return (
             {/* Right Visual */}
             <div className="relative hidden lg:block">
               <div className="relative z-10 bg-white rounded-2xl shadow-2xl p-6 border border-gray-100 max-w-md mx-auto transform rotate-2 hover:rotate-0 transition-transform duration-500">
-                 {/* Hero Image Placeholder - Intended for High-Quality Video Testimonial or Trustworthy Portrait */}
-                 <div className="relative rounded-xl overflow-hidden bg-gray-200 aspect-[4/3] mb-6 flex items-center justify-center">
-                    <div className="text-center p-6">
-                      <div className="bg-gray-300 w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center">
-                         <span className="text-gray-500 text-2xl">▶</span>
-                      </div>
-                      <p className="text-gray-500 font-medium text-sm">Candidate Intro / Hero Portrait</p>
-                    </div>
+                 {/* Hero Image - Candidate Profile */}
+                 <div className="relative rounded-xl overflow-hidden bg-gray-100 aspect-[4/3] mb-6">
+                    <Image
+                      src="https://images.unsplash.com/photo-1589386417686-0d34b5903d23?auto=format&fit=crop&q=80&w=800"
+                      alt="Top Candidate"
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 100vw, 400px"
+                      priority
+                    />
                  </div>
 
-                 <div className="space-y-3">
-                    <div className="h-2 w-2/3 bg-gray-100 rounded-full"></div>
-                    <div className="h-2 w-full bg-gray-100 rounded-full"></div>
+                 <div className="space-y-2">
+                    <div className="flex justify-between items-center">
+                      <h3 className="font-bold text-gray-900">Alejandro Rodriguez</h3>
+                      <span className="text-xs font-medium text-green-700 bg-green-50 px-2 py-1 rounded-full border border-green-100">Available Now</span>
+                    </div>
+                    <p className="text-sm text-gray-500">Senior Executive Assistant • 7y Exp</p>
+                    <div className="flex items-center gap-1 pt-1">
+                      {[1,2,3,4,5].map(star => (
+                        <svg key={star} className="w-4 h-4 text-yellow-400 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+                      ))}
+                      <span className="text-xs text-gray-400 ml-1">(5.0)</span>
+                    </div>
                  </div>
               </div>
               
@@ -298,7 +309,7 @@ return (
           <FeatureBlock
             title="Rigorous 4-Step Vetting"
             description="We don't just let anyone in. Our candidates must pass English fluency tests, logic assessments, and behavioral interviews. We filter out 99% of applicants, so you only see the top 1%."
-            image="https://placehold.co/800x600/e2e8f0/64748b?text=Modern+SaaS+Dashboard+UI"
+            image="https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&q=80&w=800"
             imagePosition="right"
             tags={['Identity Verification', 'Skill Assessment', 'Video Interview']}
           />
@@ -306,7 +317,7 @@ return (
           <FeatureBlock
             title="Seamless Tech Integration"
             description="Our remote workers are digital natives. They can plug directly into your Slack, manage Jira tickets, and update your HubSpot CRM without requiring basic training."
-            image="https://placehold.co/800x600/e2e8f0/64748b?text=Integration+Workflow+UI"
+            image="https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&q=80&w=800"
             imagePosition="left"
             tags={['Slack Native', 'Google Workspace', 'Asana Expert']}
           />
@@ -314,7 +325,7 @@ return (
           <FeatureBlock
             title="Dedicated Success Manager"
             description="You are never alone. Every account includes a dedicated Customer Success Manager to handle payroll, compliance, and performance reviews, ensuring your new hire is successful."
-            image="https://placehold.co/800x600/e2e8f0/64748b?text=Success+Manager+Dashboard"
+            image="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&q=80&w=800"
             imagePosition="right"
             tags={['Performance Reviews', 'Payroll Handled', 'Dispute Resolution']}
           />
