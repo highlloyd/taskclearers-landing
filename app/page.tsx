@@ -48,9 +48,11 @@ export default function App() {
     setIsBookingOpen(true);
     setIsMobileMenuOpen(false);
   };
+const currentYear = new Date().getFullYear();
 
-  return (
-    <div className="min-h-screen bg-white font-sans text-gray-900 selection:bg-green-100 selection:text-green-900">
+return (
+  <div className="min-h-screen bg-white font-sans text-gray-900 selection:bg-green-100 selection:text-green-900">
+    
       
       {/* The Booking Modal */}
       <BookingModal isOpen={isBookingOpen} onClose={() => setIsBookingOpen(false)} />
@@ -442,7 +444,7 @@ export default function App() {
           <div className="flex flex-col md:flex-row justify-between items-center gap-8 mb-12">
             <Logo />
             <div className="text-sm text-gray-500">
-              © 2024 TaskClearers. All rights reserved.
+              © {currentYear} TaskClearers. All rights reserved.
             </div>
           </div>
         </div>
