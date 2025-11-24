@@ -115,7 +115,7 @@ export default function App() {
               </h1>
               
               <p className="text-xl text-gray-600 mb-8 leading-relaxed max-w-lg">
-                Vetted professionals ready to integrate instantly. Focus on growth, not hiring.
+                Focus on growth, not hiring. Get vetted professionals who are ready to seamlessly integrate into your team.
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4">
@@ -127,20 +127,9 @@ export default function App() {
                 </Button>
               </div>
 
-              <div className="mt-8 flex items-center gap-4 text-sm text-gray-500">
-                <div className="flex -space-x-3">
-                  {[1,2,3,4].map((i) => (
-                    <div key={i} className="w-9 h-9 rounded-full border-2 border-white bg-gray-200 overflow-hidden shadow-sm relative">
-                      <Image
-                        src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${i+25}`}
-                        alt="User"
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
-                  ))}
-                </div>
-                <p>Expert talent ready to start</p>
+              <div className="mt-8 flex items-center gap-3 text-sm text-gray-600">
+                <CheckCircle2 className="w-5 h-5 text-green-600" />
+                <p><span className="font-semibold text-gray-800">Vetted and Ready</span> Talent</p>
               </div>
             </div>
 
@@ -234,19 +223,19 @@ export default function App() {
                 icon: PhoneCall,
                 step: "01",
                 title: "Book a Discovery Call",
-                desc: "Tell us about your bottlenecks and the tools you use in a quick 15-min chat."
+                desc: "In a brief 15-minute chat, tell us about your bottlenecks and the tools you use."
               },
               {
                 icon: UserCheck,
                 step: "02",
                 title: "Get Matched Expertly",
-                desc: "We select the perfect pre-trained pro from our bench to match your specific needs."
+                desc: "We select the ideal pre-trained professional from our team to meet your specific needs."
               },
               {
                 icon: Zap,
                 step: "03",
                 title: "Start Clearing Tasks",
-                desc: "Your new team member joins your Slack and starts working efficiently within 24h."
+                desc: "Your new team member will join your Slack and begin working efficiently within 24 hours."
               }
             ].map((item, idx, arr) => (
               <div key={item.step} className="relative flex flex-col gap-6 rounded-3xl bg-white/90 p-8 shadow-lg shadow-gray-200/60 border border-white/70 backdrop-blur">
@@ -303,7 +292,7 @@ export default function App() {
 
           <FeatureBlock
             title="Rigorous 4-Step Vetting"
-            description="We don't just let anyone in. Our candidates pass English fluency tests, logic assessments, and behavioral interviews. We filter out 99% of applicants so you only see the top 1%."
+            description="We don't just let anyone in. Our candidates must pass English fluency tests, logic assessments, and behavioral interviews. We filter out 99% of applicants, so you only see the top 1%."
             image="https://placehold.co/800x600/e2e8f0/64748b?text=Modern+SaaS+Dashboard+UI"
             imagePosition="right"
             tags={['Identity Verification', 'Skill Assessment', 'Video Interview']}
@@ -311,7 +300,7 @@ export default function App() {
 
           <FeatureBlock
             title="Seamless Tech Integration"
-            description="Our remote workers are digital natives. They plug directly into your Slack, manage your Jira tickets, and update your HubSpot CRM without needing basic training."
+            description="Our remote workers are digital natives. They can plug directly into your Slack, manage Jira tickets, and update your HubSpot CRM without requiring basic training."
             image="https://placehold.co/800x600/e2e8f0/64748b?text=Integration+Workflow+UI"
             imagePosition="left"
             tags={['Slack Native', 'Google Workspace', 'Asana Expert']}
@@ -319,7 +308,7 @@ export default function App() {
 
           <FeatureBlock
             title="Dedicated Success Manager"
-            description="You are never alone. Every account gets a dedicated Customer Success Manager to handle payroll, compliance, and performance reviews, ensuring your new hire succeeds."
+            description="You are never alone. Every account includes a dedicated Customer Success Manager to handle payroll, compliance, and performance reviews, ensuring your new hire is successful."
             image="https://placehold.co/800x600/e2e8f0/64748b?text=Success+Manager+Dashboard"
             imagePosition="right"
             tags={['Performance Reviews', 'Payroll Handled', 'Dispute Resolution']}
@@ -401,20 +390,20 @@ export default function App() {
           
           <div className="space-y-4 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
             <AccordionItem 
-              question="Are the workers full-time or part-time?" 
-              answer="We offer flexible arrangements. You can start with as little as 10 hours a week or hire a full-time dedicated professional depending on your workload."
+              question="Are the workers full-time or part-time?"
+              answer="We provide flexible arrangements to suit your needs. You can begin with as little as 10 hours per week or hire a full-time dedicated professional, depending on your workload."
             />
-            <AccordionItem 
-              question="Where are your assistants located?" 
-              answer="Our talent pool is global, allowing us to find the best skills at competitive rates. All workers are fluent in English and work during your preferred business hours."
+            <AccordionItem
+              question="Where are your assistants located?"
+              answer="Our talent pool is global, which allows us to find the best skills at competitive rates. All our workers are fluent in English and can work during your preferred business hours."
             />
-            <AccordionItem 
-              question="What if it's not a good fit?" 
-              answer="We have a replacement guarantee. If you feel your assigned pro isn't the right match in the first week, we will pair you with a new team member at no extra cost."
+            <AccordionItem
+              question="What if it's not a good fit?"
+              answer="We offer a replacement guarantee. If you feel that your assigned professional isn't the right match during the first week, we will pair you with a new team member at no additional cost."
             />
-            <AccordionItem 
-              question="Do I need to train them?" 
-              answer="Our workers come pre-trained on standard remote work tools (Slack, Zoom, Google Workspace). You only need to show them your specific company processes."
+            <AccordionItem
+              question="Do I need to train them?"
+              answer="Our workers come pre-trained on standard remote work tools like Slack, Zoom, and Google Workspace. You will only need to familiarize them with your specific company processes."
             />
           </div>
         </div>
@@ -430,12 +419,12 @@ export default function App() {
 
               <h2 className="text-3xl md:text-5xl font-bold mb-6 relative z-10">Ready to reclaim your time?</h2>
               <p className="text-green-100 text-lg md:text-xl max-w-2xl mx-auto mb-10 relative z-10">
-                Scale your business faster by delegating your busywork to Taskclearers.
-                Zero risk, cancel anytime.
+                Scale your business faster by delegating your busy work to Taskclearers.
+                There is zero risk, and you can cancel anytime.
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-4 relative z-10">
                 <Button variant="white" className="text-lg px-10 py-4" onClick={openBooking}>
-                  Book Your Discovery Call
+                  Book a Discovery Call
                 </Button>
               </div>
            </div>
