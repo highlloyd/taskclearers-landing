@@ -1,16 +1,20 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { 
-  CheckCircle2, 
+import Image from 'next/image';
+import {
+  CheckCircle2,
   Users, 
   ShieldCheck, 
   Menu,
   X,
   Clock,
   Briefcase,
-  Mail, 
-  Database
+  Mail,
+  Database,
+  PhoneCall,
+  UserCheck,
+  Zap
 } from 'lucide-react';
 
 import Button from '../components/ui/Button';
@@ -58,10 +62,10 @@ export default function App() {
           
           {/* Desktop Nav */}
           <div className="hidden md:flex items-center gap-8">
-            <button onClick={() => scrollToSection('how-it-works')} className="text-gray-600 hover:text-green-700 font-medium transition-colors">How It Works</button>
-            <button onClick={() => scrollToSection('why-us')} className="text-gray-600 hover:text-green-700 font-medium transition-colors">Why Us</button>
-            <button onClick={() => scrollToSection('services')} className="text-gray-600 hover:text-green-700 font-medium transition-colors">Services</button>
-            <button onClick={() => scrollToSection('faq')} className="text-gray-600 hover:text-green-700 font-medium transition-colors">FAQ</button>
+            <a href="#how-it-works" onClick={(e) => { e.preventDefault(); scrollToSection('how-it-works'); }} className="text-gray-600 hover:text-green-700 font-medium transition-colors">How It Works</a>
+            <a href="#why-us" onClick={(e) => { e.preventDefault(); scrollToSection('why-us'); }} className="text-gray-600 hover:text-green-700 font-medium transition-colors">Why Us</a>
+            <a href="#services" onClick={(e) => { e.preventDefault(); scrollToSection('services'); }} className="text-gray-600 hover:text-green-700 font-medium transition-colors">Services</a>
+            <a href="#faq" onClick={(e) => { e.preventDefault(); scrollToSection('faq'); }} className="text-gray-600 hover:text-green-700 font-medium transition-colors">FAQ</a>
             <Button variant="primary" className="py-2.5 px-5 text-sm" onClick={openBooking}>Book Discovery Call</Button>
           </div>
 
@@ -77,9 +81,9 @@ export default function App() {
         {/* Mobile Nav Dropdown */}
         {isMobileMenuOpen && (
           <div className="absolute top-full left-0 w-full bg-white border-b md:hidden shadow-xl flex flex-col p-4 gap-4 animate-in slide-in-from-top-5">
-            <button onClick={() => scrollToSection('how-it-works')} className="text-left p-2 hover:bg-gray-50 rounded-lg font-medium text-gray-700">How It Works</button>
-            <button onClick={() => scrollToSection('why-us')} className="text-left p-2 hover:bg-gray-50 rounded-lg font-medium text-gray-700">Why Us</button>
-            <button onClick={() => scrollToSection('services')} className="text-left p-2 hover:bg-gray-50 rounded-lg font-medium text-gray-700">Services</button>
+            <a href="#how-it-works" onClick={(e) => { e.preventDefault(); scrollToSection('how-it-works'); }} className="text-left p-2 hover:bg-gray-50 rounded-lg font-medium text-gray-700">How It Works</a>
+            <a href="#why-us" onClick={(e) => { e.preventDefault(); scrollToSection('why-us'); }} className="text-left p-2 hover:bg-gray-50 rounded-lg font-medium text-gray-700">Why Us</a>
+            <a href="#services" onClick={(e) => { e.preventDefault(); scrollToSection('services'); }} className="text-left p-2 hover:bg-gray-50 rounded-lg font-medium text-gray-700">Services</a>
             <Button variant="primary" className="w-full justify-center" onClick={openBooking}>Book Discovery Call</Button>
           </div>
         )}
@@ -104,14 +108,14 @@ export default function App() {
               </div>
               
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.15] mb-6 text-gray-900">
-                Clear Your To-Do List. <br />
+                Hire Top 1% Remote Talent in 5 Days <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-emerald-500">
-                  Pre-Trained Remote Workers
-                </span> in 5-7 Days.
+                  (Pre-Trained & Ready).
+                </span>
               </h1>
               
               <p className="text-xl text-gray-600 mb-8 leading-relaxed max-w-lg">
-                Stop drowning in tasks. We provide vetted professionals ready to integrate with your tools instantly—so you can focus on growth.
+                Vetted professionals ready to integrate instantly. Focus on growth, not hiring.
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4">
@@ -126,37 +130,30 @@ export default function App() {
               <div className="mt-8 flex items-center gap-4 text-sm text-gray-500">
                 <div className="flex -space-x-3">
                   {[1,2,3,4].map((i) => (
-                    <div key={i} className="w-9 h-9 rounded-full border-2 border-white bg-gray-200 overflow-hidden shadow-sm">
-                      <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${i+25}`} alt="User" />
+                    <div key={i} className="w-9 h-9 rounded-full border-2 border-white bg-gray-200 overflow-hidden shadow-sm relative">
+                      <Image
+                        src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${i+25}`}
+                        alt="User"
+                        fill
+                        className="object-cover"
+                      />
                     </div>
                   ))}
                 </div>
-                <p>Join our exclusive network</p>
+                <p>Expert talent ready to start</p>
               </div>
             </div>
 
             {/* Right Visual */}
             <div className="relative hidden lg:block">
               <div className="relative z-10 bg-white rounded-2xl shadow-2xl p-6 border border-gray-100 max-w-md mx-auto transform rotate-2 hover:rotate-0 transition-transform duration-500">
-                 {/* Hero Image Placeholder */}
-                 <div className="relative rounded-xl overflow-hidden bg-gray-100 aspect-[4/3] mb-6 group cursor-default">
-                    <img 
-                      src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=800" 
-                      alt="Professional working" 
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                    />
-                    
-                    {/* Floating Cards Overlay */}
-                    <div className="absolute top-4 right-4 bg-white/95 backdrop-blur-sm p-3 rounded-lg shadow-lg flex items-center gap-3 animate-bounce-slow border border-gray-100">
-                        <div className="bg-blue-100 p-2 rounded-md"><Mail size={16} className="text-blue-600"/></div>
-                        <div className="text-xs font-bold text-gray-700">Inbox Zero</div>
-                        <CheckCircle2 size={16} className="text-green-500 ml-auto" />
-                    </div>
-
-                    <div className="absolute bottom-4 left-4 bg-white/95 backdrop-blur-sm p-3 rounded-lg shadow-lg flex items-center gap-3 animate-bounce-slow delay-700 border border-gray-100">
-                        <div className="bg-purple-100 p-2 rounded-md"><Database size={16} className="text-purple-600"/></div>
-                        <div className="text-xs font-bold text-gray-700">CRM Updated</div>
-                        <CheckCircle2 size={16} className="text-green-500 ml-auto" />
+                 {/* Hero Image Placeholder - Intended for High-Quality Video Testimonial or Trustworthy Portrait */}
+                 <div className="relative rounded-xl overflow-hidden bg-gray-200 aspect-[4/3] mb-6 flex items-center justify-center">
+                    <div className="text-center p-6">
+                      <div className="bg-gray-300 w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center">
+                         <span className="text-gray-500 text-2xl">▶</span>
+                      </div>
+                      <p className="text-gray-500 font-medium text-sm">Candidate Intro / Hero Portrait</p>
                     </div>
                  </div>
 
@@ -175,15 +172,20 @@ export default function App() {
         </div>
       </div>
 
-      {/* Social Proof / Trust Bar */}
+      {/* Service Guarantees Bar */}
       <div className="border-y border-gray-100 bg-gray-50/50 py-10">
-        <div className="container mx-auto px-4 text-center">
-          <p className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-6">Tools our experts are trained on</p>
-          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
-            {['Slack', 'HubSpot', 'Salesforce', 'Asana', 'Zoom', 'Shopify'].map((brand) => (
-              <span key={brand} className="text-xl md:text-2xl font-bold text-gray-400 hover:text-gray-800 cursor-default select-none">
-                {brand}
-              </span>
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col md:flex-row justify-center items-center gap-8 md:gap-16">
+            {[
+              { label: 'Talent Quality', value: 'Top 1%' },
+              { label: 'Placement Speed', value: '< 48 Hrs' },
+              { label: 'Risk Free Trial', value: '7 Days' },
+              { label: 'Contract Type', value: 'Flexible' }
+            ].map((metric) => (
+              <div key={metric.label} className="text-center">
+                 <div className="text-2xl md:text-3xl font-bold text-gray-900">{metric.value}</div>
+                 <div className="text-sm text-gray-500 font-medium uppercase tracking-wide">{metric.label}</div>
+              </div>
             ))}
           </div>
         </div>
@@ -198,10 +200,10 @@ export default function App() {
         <div className="container mx-auto px-4 relative z-10">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-12 text-center">
             {[
-              { icon: Users, val: '1%', label: 'Acceptance Rate' },
-              { icon: Clock, val: '24h', label: 'Avg Start Time' },
-              { icon: Briefcase, val: '50+', label: 'Skill Sets' },
-              { icon: ShieldCheck, val: '100%', label: 'Guarantee' },
+              { icon: Users, val: 'Top 1%', label: 'Talent Standard' },
+              { icon: Clock, val: 'Rapid', label: 'Onboarding Speed' },
+              { icon: Briefcase, val: '50+', label: 'Expert Skill Sets' },
+              { icon: ShieldCheck, val: '100%', label: 'Satisfaction Guarantee' },
             ].map((stat, i) => (
               <div key={i} className="flex flex-col items-center gap-4 group">
                 <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-green-400 group-hover:scale-110 group-hover:bg-white/10 transition-all duration-300">
@@ -217,6 +219,80 @@ export default function App() {
         </div>
       </Section>
 
+      {/* How It Works Section */}
+      <Section id="how-it-works" className="bg-gray-50 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.08),_transparent_55%)]" />
+        <div className="container mx-auto px-4 md:px-6 relative z-10">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+             <h2 className="text-3xl md:text-4xl font-bold mb-6 text-gray-900">Clear your tasks in 3 simple steps</h2>
+             <p className="text-gray-600 text-lg">No lengthy interviews. No contracts. Just results.</p>
+          </div>
+
+          <div className="grid gap-8 md:grid-cols-3">
+            {[
+              {
+                icon: PhoneCall,
+                step: "01",
+                title: "Book a Discovery Call",
+                desc: "Tell us about your bottlenecks and the tools you use in a quick 15-min chat."
+              },
+              {
+                icon: UserCheck,
+                step: "02",
+                title: "Get Matched Expertly",
+                desc: "We select the perfect pre-trained pro from our bench to match your specific needs."
+              },
+              {
+                icon: Zap,
+                step: "03",
+                title: "Start Clearing Tasks",
+                desc: "Your new team member joins your Slack and starts working efficiently within 24h."
+              }
+            ].map((item, idx, arr) => (
+              <div key={item.step} className="relative flex flex-col gap-6 rounded-3xl bg-white/90 p-8 shadow-lg shadow-gray-200/60 border border-white/70 backdrop-blur">
+                {/* Desktop connector */}
+                {/* Mobile timeline connector */}
+                {idx < arr.length - 1 && (
+                  <div className="md:hidden absolute bottom-0 left-1/2 h-8 w-px bg-gradient-to-b from-green-400 to-transparent translate-y-full" />
+                )}
+
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-4">
+                    <div className="w-16 h-16 rounded-2xl bg-green-50 text-green-600 flex items-center justify-center text-2xl">
+                      <item.icon size={30} />
+                    </div>
+                    <div className="hidden md:block text-sm font-semibold tracking-[0.15em] uppercase text-gray-500">
+                      Step {item.step}
+                    </div>
+                  </div>
+                  <div className="md:hidden">
+                    <span className="text-sm font-semibold tracking-[0.15em] uppercase text-gray-500">Step {item.step}</span>
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <h3 className="text-2xl font-semibold text-gray-900">{item.title}</h3>
+                  <p className="text-gray-600 leading-relaxed">{item.desc}</p>
+                </div>
+
+                <div className="flex items-center gap-2 text-sm font-semibold text-green-600">
+                  <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-green-50 border border-green-100">
+                    {item.step}
+                  </span>
+                  <span>{idx === 0 ? 'Kickoff' : idx === 1 ? 'Match & onboard' : 'Go live in Slack'}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+          
+          <div className="mt-16 text-center">
+            <Button variant="primary" onClick={openBooking} className="text-lg px-8 py-4 shadow-lg shadow-green-200 mx-auto">
+              Start Your 7-Day Risk-Free Trial
+            </Button>
+          </div>
+        </div>
+      </Section>
+
       {/* Features (Zig Zag) */}
       <Section id="why-us" className="bg-white">
         <div className="container mx-auto px-4 md:px-6">
@@ -225,26 +301,26 @@ export default function App() {
             <p className="text-gray-600 text-lg">We manage the talent lifecycle so you can manage your business.</p>
           </div>
 
-          <FeatureBlock 
-            title="Rigorous 4-Step Vetting" 
+          <FeatureBlock
+            title="Rigorous 4-Step Vetting"
             description="We don't just let anyone in. Our candidates pass English fluency tests, logic assessments, and behavioral interviews. We filter out 99% of applicants so you only see the top 1%."
-            image="https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&q=80&w=800"
+            image="https://placehold.co/800x600/e2e8f0/64748b?text=Modern+SaaS+Dashboard+UI"
             imagePosition="right"
             tags={['Identity Verification', 'Skill Assessment', 'Video Interview']}
           />
 
-          <FeatureBlock 
-            title="Seamless Tech Integration" 
+          <FeatureBlock
+            title="Seamless Tech Integration"
             description="Our remote workers are digital natives. They plug directly into your Slack, manage your Jira tickets, and update your HubSpot CRM without needing basic training."
-            image="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=800"
+            image="https://placehold.co/800x600/e2e8f0/64748b?text=Integration+Workflow+UI"
             imagePosition="left"
             tags={['Slack Native', 'Google Workspace', 'Asana Expert']}
           />
 
-          <FeatureBlock 
-            title="Dedicated Success Manager" 
+          <FeatureBlock
+            title="Dedicated Success Manager"
             description="You are never alone. Every account gets a dedicated Customer Success Manager to handle payroll, compliance, and performance reviews, ensuring your new hire succeeds."
-            image="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&q=80&w=800"
+            image="https://placehold.co/800x600/e2e8f0/64748b?text=Success+Manager+Dashboard"
             imagePosition="right"
             tags={['Performance Reviews', 'Payroll Handled', 'Dispute Resolution']}
           />
@@ -262,7 +338,7 @@ export default function App() {
             <div className="min-w-[700px] bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
               <div className="grid grid-cols-4 p-6 bg-gray-50 border-b border-gray-100 font-bold text-gray-700">
                 <div className="col-span-1">Comparison</div>
-                <div className="col-span-1 text-center text-green-600">Taskclearers</div>
+                <div className="col-span-1 text-center text-green-700 bg-green-50/50 -mx-4 py-3 rounded-t-xl border-t border-x border-green-100 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.02)]">Taskclearers</div>
                 <div className="col-span-1 text-center text-gray-400">Freelance Sites</div>
                 <div className="col-span-1 text-center text-gray-400">Traditional Hiring</div>
               </div>
@@ -274,48 +350,19 @@ export default function App() {
                 { feature: "Replacement Cost", us: "Free & Immediate", them1: "Lost Time/Money", them2: "Expensive Severance" },
                 { feature: "Training Required", us: "Minimal (Tool Ready)", them1: "Varies", them2: "Extensive" }
               ].map((row, i) => (
-                <div key={i} className="grid grid-cols-4 p-6 border-b border-gray-100 hover:bg-green-50/10 transition-colors items-center">
+                <div key={i} className="grid grid-cols-4 p-6 border-b border-gray-100 hover:bg-gray-50 transition-colors items-center relative">
                    <div className="col-span-1 font-semibold text-gray-800">{row.feature}</div>
-                   <div className="col-span-1 text-center font-bold text-green-700 bg-green-50 py-2 rounded-lg">{row.us}</div>
+                   
+                   {/* Highlighted 'Our Company' Column */}
+                   <div className="col-span-1 text-center font-bold text-green-800 bg-green-50/50 py-4 -my-6 -mx-4 border-x border-green-100 flex items-center justify-center h-[calc(100%+3rem)] relative z-10 shadow-sm">
+                      {row.us}
+                   </div>
+                   
                    <div className="col-span-1 text-center text-gray-500">{row.them1}</div>
                    <div className="col-span-1 text-center text-gray-500">{row.them2}</div>
                 </div>
               ))}
             </div>
-          </div>
-        </div>
-      </Section>
-
-      {/* How It Works Section */}
-      <Section id="how-it-works" className="bg-gray-900 text-white relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
-        <div className="container mx-auto px-4 md:px-6 relative z-10">
-          <div className="flex flex-col md:flex-row gap-12 items-center">
-            
-            <div className="w-full md:w-1/2">
-               <h2 className="text-3xl md:text-4xl font-bold mb-6">How we clear your tasks in 3 simple steps</h2>
-               <p className="text-gray-400 text-lg mb-8">No lengthy interviews. No contracts. Just results.</p>
-               <Button variant="white" onClick={openBooking}>Get Started Now</Button>
-            </div>
-
-            <div className="w-full md:w-1/2 space-y-6">
-              {[
-                { step: "01", title: "Book a Discovery Call", desc: "Tell us about your bottlenecks and the tools you use." },
-                { step: "02", title: "Get Matched Expertly", desc: "We select the perfect pre-trained pro from our bench to match your specific needs." },
-                { step: "03", title: "Start Clearing Tasks", desc: "Your new team member joins your Slack and starts working efficiently." }
-              ].map((item, i) => (
-                <div key={i} className="flex gap-6 items-start group">
-                   <div className="text-4xl font-bold text-gray-700 group-hover:text-green-500 transition-colors">
-                     {item.step}
-                   </div>
-                   <div>
-                     <h3 className="text-xl font-bold mb-2">{item.title}</h3>
-                     <p className="text-gray-400">{item.desc}</p>
-                   </div>
-                </div>
-              ))}
-            </div>
-
           </div>
         </div>
       </Section>
@@ -383,7 +430,7 @@ export default function App() {
 
               <h2 className="text-3xl md:text-5xl font-bold mb-6 relative z-10">Ready to reclaim your time?</h2>
               <p className="text-green-100 text-lg md:text-xl max-w-2xl mx-auto mb-10 relative z-10">
-                Join forward-thinking founders who are scaling their business by delegating to Taskclearers. 
+                Scale your business faster by delegating your busywork to Taskclearers.
                 Zero risk, cancel anytime.
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-4 relative z-10">

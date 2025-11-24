@@ -1,17 +1,24 @@
 import React from 'react';
+import Image from 'next/image';
 
 const FeatureBlock = ({ title, description, image, imagePosition = 'right', tags = [] }: any) => {
   return (
     <div className="flex flex-col lg:flex-row items-center gap-12 mb-24 last:mb-0">
       <div className={`w-full lg:w-1/2 ${imagePosition === 'right' ? 'lg:order-1' : 'lg:order-2'}`}>
-        <div className="relative rounded-2xl overflow-hidden shadow-2xl group cursor-pointer">
+        <div className="relative rounded-2xl overflow-hidden shadow-2xl group cursor-pointer aspect-video">
           <div className="absolute inset-0 bg-green-900/10 group-hover:bg-transparent transition-colors duration-500 z-10"></div>
-          <img src={image} alt={title} className="w-full h-auto object-cover transform group-hover:scale-105 transition-transform duration-700" />
+          <Image
+            src={image}
+            alt={title}
+            fill
+            className="object-cover transform group-hover:scale-105 transition-transform duration-700"
+            sizes="(max-width: 768px) 100vw, 50vw"
+          />
         </div>
       </div>
       <div className={`w-full lg:w-1/2 ${imagePosition === 'right' ? 'lg:order-2' : 'lg:order-1'}`}>
         <h3 className="text-3xl font-bold mb-4 text-gray-900">{title}</h3>
-        <p className="text-lg text-gray-600 mb-6 leading-relaxed">
+        <p className="text-lg text-gray-600 mb-6 leading-relaxed max-w-[60ch]">
           {description}
         </p>
         <div className="flex flex-wrap gap-2">
