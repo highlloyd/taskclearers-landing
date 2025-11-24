@@ -68,6 +68,7 @@ return (
             <a href="#why-us" onClick={(e) => { e.preventDefault(); scrollToSection('why-us'); }} className="text-gray-600 hover:text-green-700 font-medium transition-colors">Why Us</a>
             <a href="#services" onClick={(e) => { e.preventDefault(); scrollToSection('services'); }} className="text-gray-600 hover:text-green-700 font-medium transition-colors">Services</a>
             <a href="#faq" onClick={(e) => { e.preventDefault(); scrollToSection('faq'); }} className="text-gray-600 hover:text-green-700 font-medium transition-colors">FAQ</a>
+            <a href="/careers" className="text-gray-600 hover:text-green-700 font-medium transition-colors">Careers</a>
             <Button variant="primary" className="py-2.5 px-5 text-sm" onClick={openBooking}>Book Discovery Call</Button>
           </div>
 
@@ -86,6 +87,7 @@ return (
             <a href="#how-it-works" onClick={(e) => { e.preventDefault(); scrollToSection('how-it-works'); }} className="text-left p-2 hover:bg-gray-50 rounded-lg font-medium text-gray-700">How It Works</a>
             <a href="#why-us" onClick={(e) => { e.preventDefault(); scrollToSection('why-us'); }} className="text-left p-2 hover:bg-gray-50 rounded-lg font-medium text-gray-700">Why Us</a>
             <a href="#services" onClick={(e) => { e.preventDefault(); scrollToSection('services'); }} className="text-left p-2 hover:bg-gray-50 rounded-lg font-medium text-gray-700">Services</a>
+            <a href="/careers" className="text-left p-2 hover:bg-gray-50 rounded-lg font-medium text-gray-700">Careers</a>
             <Button variant="primary" className="w-full justify-center" onClick={openBooking}>Book Discovery Call</Button>
           </div>
         )}
