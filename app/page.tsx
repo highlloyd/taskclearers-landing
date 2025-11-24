@@ -168,7 +168,7 @@ export default function App() {
             {[
               { label: 'Talent Quality', value: 'Top 1%' },
               { label: 'Placement Speed', value: '< 48 Hrs' },
-              { label: 'Risk Free Trial', value: '7 Days' },
+              { label: 'Satisfaction', value: 'Guaranteed' },
               { label: 'Contract Type', value: 'Flexible' }
             ].map((metric) => (
               <div key={metric.label} className="text-center">
@@ -276,7 +276,7 @@ export default function App() {
           
           <div className="mt-16 text-center">
             <Button variant="primary" onClick={openBooking} className="text-lg px-8 py-4 shadow-lg shadow-green-200 mx-auto">
-              Start Your 7-Day Risk-Free Trial
+              Book a Discovery Call
             </Button>
           </div>
         </div>
