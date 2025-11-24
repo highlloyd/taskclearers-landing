@@ -96,16 +96,20 @@ export default function CareersPage() {
         </div>
       </Section>
       
-      {/* Contact Section */}
+      {/* General Application Section */}
       <Section>
         <div className="container mx-auto px-4 md:px-6 text-center max-w-3xl">
           <h2 className="text-3xl font-bold mb-4">Don't see a fit?</h2>
           <p className="text-gray-600 text-lg mb-8">
-            We're always looking for talented people. Send us your resume and we'll keep it on file for future opportunities.
+            We're always looking for talented people. If you don't see a position that fits your skills, you can submit a general application.
           </p>
-          <Button variant="primary" className="text-lg px-8" onClick={() => window.location.href = 'mailto:careers@taskclearers.com'}>
-            <Mail className="mr-2" /> Email Us
-          </Button>
+          <div className="flex justify-center">
+            <Link href="/careers/general-application">
+              <Button variant="primary" className="text-lg px-8">
+                <Mail className="mr-2" /> Apply Generally
+              </Button>
+            </Link>
+          </div>
         </div>
       </Section>
 

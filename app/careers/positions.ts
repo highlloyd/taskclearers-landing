@@ -28,4 +28,11 @@ export const jobOpenings: Job[] = [
     department: 'Customer Success',
     description: 'We are looking for a Customer Success Manager to join our team. You will be responsible for ensuring that our customers are successful with our product. You will work closely with our sales and product teams to provide our customers with the best possible experience.',
   },
+  {
+    id: 'general-application',
+    title: 'General Application',
+    location: 'Remote',
+    department: 'General',
+    description: 'If you don\'t see a position that fits your skills, you can submit a general application.',
+  },
 ];

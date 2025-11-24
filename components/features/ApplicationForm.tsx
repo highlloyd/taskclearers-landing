@@ -53,6 +53,12 @@ export default function ApplicationForm({ jobTitle }: ApplicationFormProps) {
             <label htmlFor="coverLetter" className="block text-sm font-medium text-gray-700 mb-2">Cover Letter</label>
             <textarea name="coverLetter" id="coverLetter" rows={4} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"></textarea>
           </div>
+          {jobTitle === 'General Application' && (
+            <div className="md:col-span-2">
+              <label htmlFor="goodAt" className="block text-sm font-medium text-gray-700 mb-2">What would you be good at?</label>
+              <textarea name="goodAt" id="goodAt" rows={4} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"></textarea>
+            </div>
+          )}
         </div>
         <div className="mt-8">
           <Button type="submit" variant="primary" className="w-full py-3 text-lg">Submit Application</Button>
