@@ -7,7 +7,7 @@ const Logo = () => (
     <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
       <CheckCircle2 className="w-5 h-5 text-green-600" />
     </div>
-    <span>Taskclearers</span>
+    <span>TaskClearers</span>
   </Link>
 );
 

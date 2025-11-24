@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: '/private/',
     },
-    sitemap: 'https://taskclearers.com/sitemap.xml',
+    sitemap: 'https://TaskClearers.com/sitemap.xml',
   };
 }

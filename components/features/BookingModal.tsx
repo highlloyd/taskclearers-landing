@@ -37,7 +37,7 @@ const BookingModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => voi
            </div>
            
            <iframe 
-             src='https://outlook.office.com/book/TaskClearers1@Taskclearers.com/' 
+             src='https://outlook.office.com/book/TaskClearers1@TaskClearers.com/' 
              width='100%' 
              height='100%' 
              className="relative z-10 w-full h-full"

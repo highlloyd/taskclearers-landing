@@ -332,7 +332,7 @@ export default function App() {
                 {/* Table Header */}
                 <div className="grid grid-cols-4 items-center p-5 bg-transparent border-b border-gray-200">
                   <div className="font-bold text-gray-800">Comparison</div>
-                  <div className="text-center font-bold text-green-700">Taskclearers</div>
+                  <div className="text-center font-bold text-green-700">TaskClearers</div>
                   <div className="text-center font-semibold text-gray-500">Freelance Sites</div>
                   <div className="text-center font-semibold text-gray-500">Traditional Hiring</div>
                 </div>
@@ -390,7 +390,7 @@ export default function App() {
         <div className="container mx-auto px-4 md:px-6 max-w-3xl">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">Common Questions</h2>
-            <p className="text-gray-600">Everything you need to know about working with Taskclearers.</p>
+            <p className="text-gray-600">Everything you need to know about working with TaskClearers.</p>
           </div>
           
           <div className="space-y-4 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
@@ -424,7 +424,7 @@ export default function App() {
 
               <h2 className="text-3xl md:text-5xl font-bold mb-6 relative z-10">Ready to reclaim your time?</h2>
               <p className="text-green-100 text-lg md:text-xl max-w-2xl mx-auto mb-10 relative z-10">
-                Scale your business faster by delegating your busy work to Taskclearers.
+                Scale your business faster by delegating your busy work to TaskClearers.
                 There is zero risk, and you can cancel anytime.
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-4 relative z-10">
@@ -442,7 +442,7 @@ export default function App() {
           <div className="flex flex-col md:flex-row justify-between items-center gap-8 mb-12">
             <Logo />
             <div className="text-sm text-gray-500">
-              © 2024 Taskclearers. All rights reserved.
+              © 2024 TaskClearers. All rights reserved.
             </div>
           </div>
         </div>

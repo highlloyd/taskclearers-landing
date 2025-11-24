@@ -5,31 +5,31 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Taskclearers | Hire Top 1% Pre-Trained Remote Talent",
-  description: "Stop interviewing. Start delegating. Taskclearers provides vetted, pre-trained remote workers ready to join your team in 3-5 days. Risk-free trial.",
+  title: "TaskClearers | Hire Top 1% Pre-Trained Remote Talent",
+  description: "Stop interviewing. Start delegating. TaskClearers provides vetted, pre-trained remote workers ready to join your team in 3-5 days. Risk-free trial.",
   keywords: ["remote workers", "virtual assistants", "hire remote talent", "pre-trained staff", "executive assistants", "customer support outsourcing"],
-  authors: [{ name: "Taskclearers" }],
+  authors: [{ name: "TaskClearers" }],
   openGraph: {
-    title: "Taskclearers | Hire Top 1% Pre-Trained Remote Talent",
+    title: "TaskClearers | Hire Top 1% Pre-Trained Remote Talent",
     description: "Vetted professionals ready to integrate instantly. Focus on growth, not hiring. Get matched with an expert in 24 hours.",
-    url: "https://taskclearers.com",
-    siteName: "Taskclearers",
+    url: "https://TaskClearers.com",
+    siteName: "TaskClearers",
     locale: "en_US",
     type: "website",
     images: [
       {
-        url: "https://taskclearers.com/og-image.jpg", // Ideally this should be a real image path if available, or a placeholder
+        url: "https://TaskClearers.com/og-image.jpg", // Ideally this should be a real image path if available, or a placeholder
         width: 1200,
         height: 630,
-        alt: "Taskclearers - Pre-Trained Remote Workers",
+        alt: "TaskClearers - Pre-Trained Remote Workers",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Taskclearers | Hire Top 1% Pre-Trained Remote Talent",
-    description: "Stop interviewing. Start delegating. Taskclearers provides vetted, pre-trained remote workers ready to join your team.",
-    images: ["https://taskclearers.com/twitter-image.jpg"], // Placeholder
+    title: "TaskClearers | Hire Top 1% Pre-Trained Remote Talent",
+    description: "Stop interviewing. Start delegating. TaskClearers provides vetted, pre-trained remote workers ready to join your team.",
+    images: ["https://TaskClearers.com/twitter-image.jpg"], // Placeholder
   },
   robots: {
     index: true,
@@ -52,18 +52,18 @@ export default function RootLayout({
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    "name": "Taskclearers",
-    "url": "https://taskclearers.com",
-    "logo": "https://taskclearers.com/logo.png",
+    "name": "TaskClearers",
+    "url": "https://TaskClearers.com",
+    "logo": "https://TaskClearers.com/logo.png",
     "description": "Hire Top 1% Pre-Trained Remote Talent. Vetted professionals ready to integrate instantly.",
     "sameAs": [
-      "https://twitter.com/taskclearers",
-      "https://linkedin.com/company/taskclearers"
+      "https://twitter.com/TaskClearers",
+      "https://linkedin.com/company/TaskClearers"
     ],
     "contactPoint": {
       "@type": "ContactPoint",
       "contactType": "customer support",
-      "email": "hello@taskclearers.com"
+      "email": "hello@TaskClearers.com"
     }
   };
 
