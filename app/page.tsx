@@ -308,7 +308,7 @@ return (
 
           <FeatureBlock
             title="Rigorous 4-Step Vetting"
-            description="We don't just let anyone in. Our candidates must pass English fluency tests, logic assessments, and behavioral interviews. We filter out 99% of applicants, so you only see the top 1%."
+            description="Our candidates must pass English fluency tests, logic assessments, and behavioral interviews. We filter out 99% of applicants, so you only see the top 1%."
             image="https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&q=80&w=800"
             imagePosition="right"
             tags={['Identity Verification', 'Skill Assessment', 'Video Interview']}
