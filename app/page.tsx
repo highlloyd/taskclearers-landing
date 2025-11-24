@@ -340,11 +340,13 @@ return (
           </div>
           
           <div className="mx-auto">
-            <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden relative">
-              {/* Green Highlight Background */}
-              <div className="absolute top-0 left-1/4 w-1/4 h-full bg-green-50 z-0"></div>
+            <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+              <div className="overflow-x-auto">
+                <div className="min-w-[800px] relative">
+                  {/* Green Highlight Background */}
+                  <div className="absolute top-0 left-1/4 w-1/4 h-full bg-green-50 z-0"></div>
 
-              <div className="relative z-10">
+                  <div className="relative z-10">
                 {/* Table Header */}
                 <div className="grid grid-cols-4 items-center p-5 bg-transparent border-b border-gray-200">
                   <div className="font-bold text-gray-800">Comparison</div>
@@ -371,6 +373,8 @@ return (
                     <div className="text-center text-gray-600">{row.them2}</div>
                   </div>
                 ))}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
