@@ -7,7 +7,6 @@ import { Mail, Briefcase, MapPin } from 'lucide-react';
 import Button from '../../components/ui/Button';
 import Section from '../../components/ui/Section';
 import Logo from '../../components/ui/Logo';
-import BookingModal from '../../components/features/BookingModal';
 
 // --- Types ---
 import { jobOpenings, Job } from './positions';
@@ -15,19 +14,6 @@ import { jobOpenings, Job } from './positions';
 // --- Careers Page ---
 
 export default function CareersPage() {
-  const [isBookingOpen, setIsBookingOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-
-  // Handle scroll effect for navbar
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const openBooking = () => {
-    setIsBookingOpen(true);
-  };
 
   const currentYear = new Date().getFullYear();
 
@@ -35,15 +21,13 @@ export default function CareersPage() {
   return (
     <div className="min-h-screen bg-white font-sans text-gray-900 selection:bg-green-100 selection:text-green-900">
       
-      <BookingModal isOpen={isBookingOpen} onClose={() => setIsBookingOpen(false)} />
 
       {/* Navigation */}
-      <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-white/90 backdrop-blur-md shadow-sm py-4' : 'bg-transparent py-6'}`}>
+      <nav className={`fixed top-0 w-full z-50 transition-all duration-300 'bg-transparent py-6'`}>
         <div className="container mx-auto px-4 md:px-6 flex items-center justify-between">
           <Logo />
           <div className="hidden md:flex items-center gap-8">
             <Link href="/" className="text-gray-600 hover:text-green-700 font-medium transition-colors">Home</Link>
-            <Button variant="primary" className="py-2.5 px-5 text-sm" onClick={openBooking}>Book Discovery Call</Button>
           </div>
         </div>
       </nav>
