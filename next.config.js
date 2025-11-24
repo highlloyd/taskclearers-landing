@@ -1,6 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     output: 'export',
+    basePath: '/taskclearers-landing',
+    trailingSlash: true,
     images: {
         unoptimized: true,
         remotePatterns: [
