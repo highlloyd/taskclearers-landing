@@ -15,6 +15,15 @@ import { jobOpenings, Job } from './positions';
 
 export default function CareersPage() {
 
+  const [scrolled, setScrolled] = useState(false);
+
+  // Handle scroll effect for navbar
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   const currentYear = new Date().getFullYear();
 
 
@@ -23,7 +32,7 @@ export default function CareersPage() {
       
 
       {/* Navigation */}
-      <nav className={`fixed top-0 w-full z-50 transition-all duration-300 'bg-transparent py-6'`}>
+      <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-white/90 backdrop-blur-md shadow-sm py-4' : 'bg-transparent py-6'}`}>
         <div className="container mx-auto px-4 md:px-6 flex items-center justify-between">
           <Logo />
           <div className="hidden md:flex items-center gap-8">
