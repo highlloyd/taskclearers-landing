@@ -2,9 +2,11 @@ import { jobOpenings } from '../positions';
 import JobPageClient from './JobPageClient';
 
 export async function generateStaticParams() {
-  return jobOpenings.map((job) => ({
-    id: job.id,
-  }));
+  return jobOpenings
+    .filter((job) => job.id !== 'general-application')
+    .map((job) => ({
+      id: job.id,
+    }));
 }
 
 export async function generateMetadata({ params }: { params: { id: string } }) {
