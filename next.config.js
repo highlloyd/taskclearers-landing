@@ -2,8 +2,6 @@
 const nextConfig = {
     output: 'export',
     trailingSlash: true,
-    basePath: '/taskclearers-landing',
-    assetPrefix: '/taskclearers-landing/',
     images: {
         unoptimized: true,
         remotePatterns: [
