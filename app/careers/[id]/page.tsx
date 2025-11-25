@@ -9,8 +9,9 @@ export async function generateStaticParams() {
     }));
 }
 
-export async function generateMetadata({ params }: { params: { id: string } }) {
-  const job = jobOpenings.find(j => j.id === params.id);
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const job = jobOpenings.find(j => j.id === id);
   if (!job) {
     return {
       title: 'Job Not Found'
@@ -21,8 +22,9 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
   };
 }
 
-export default function JobPage({ params }: { params: { id: string } }) {
-  const job = jobOpenings.find(j => j.id === params.id);
+export default async function JobPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const job = jobOpenings.find(j => j.id === id);
 
   if (!job) {
     return <div>Job not found</div>;
