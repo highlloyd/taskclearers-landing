@@ -113,7 +113,7 @@ return (
               </div>
               
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.15] mb-6 text-gray-900">
-                Hire Top 1% Remote Talent in 5 Days <br />
+                Hire Top 1% Remote Talent in 3-5 Days <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-emerald-500">
                   (Pre-Trained & Ready).
                 </span>
@@ -125,7 +125,7 @@ return (
               
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button variant="primary" className="text-lg px-8" onClick={openBooking}>
-                  Start Clearing Tasks
+                  Book a Discovery Call
                 </Button>
                 <Button variant="outline" className="text-lg px-8" onClick={() => scrollToSection('how-it-works')}>
                   See How It Works
@@ -182,10 +182,10 @@ return (
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-center items-center gap-8 md:gap-16">
             {[
-              { label: 'Talent Quality', value: 'Top 1%' },
-              { label: 'Placement Speed', value: '< 48 Hrs' },
-              { label: 'Satisfaction', value: 'Guaranteed' },
-              { label: 'Contract Type', value: 'Flexible' }
+              { label: 'Acceptance Rate', value: 'Top 1%' },
+              { label: 'Match Time', value: '< 48 Hrs' },
+              { label: 'Time to Start', value: '3-5 Days' },
+              { label: 'Satisfaction', value: '100%' }
             ].map((metric) => (
               <div key={metric.label} className="text-center">
                  <div className="text-2xl md:text-3xl font-bold text-gray-900">{metric.value}</div>
@@ -205,8 +205,8 @@ return (
         <div className="container mx-auto px-4 relative z-10">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-12 text-center">
             {[
-              { icon: Users, val: 'Top 1%', label: 'Talent Standard' },
-              { icon: Clock, val: 'Rapid', label: 'Onboarding Speed' },
+              { icon: Users, val: '500+', label: 'Vetted Professionals' },
+              { icon: Clock, val: '< 48 Hrs', label: 'Match Time' },
               { icon: Briefcase, val: '50+', label: 'Expert Skill Sets' },
               { icon: ShieldCheck, val: '100%', label: 'Satisfaction Guarantee' },
             ].map((stat, i) => (
@@ -251,7 +251,7 @@ return (
                 icon: Zap,
                 step: "03",
                 title: "Start Clearing Tasks",
-                desc: "Your new team member will join your Slack and begin working efficiently within a week."
+                desc: "Your new team member will join your Slack and begin working efficiently in 3-5 days."
               }
             ].map((item, idx, arr) => (
               <div key={item.step} className="relative flex flex-col gap-6 rounded-3xl bg-white/90 p-8 shadow-lg shadow-gray-200/60 border border-white/70 backdrop-blur">
