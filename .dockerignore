@@ -1,0 +1,14 @@
+Dockerfile
+.dockerignore
+docker-compose.yml
+node_modules
+.next
+.git
+.gitignore
+README.md
+CLAUDE.md
+.env
+.env.local
+.env.*.local
+data
+uploads

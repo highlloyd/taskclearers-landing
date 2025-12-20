@@ -3,12 +3,19 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { ChevronLeft } from 'lucide-react';
-import { Job } from '../positions';
 import ApplicationForm from '../../../components/features/ApplicationForm';
 import Button from '../../../components/ui/Button';
 import Section from '../../../components/ui/Section';
 import Logo from '../../../components/ui/Logo';
 import BookingModal from '../../../components/features/BookingModal';
+
+interface Job {
+  id: string;
+  title: string;
+  location: string;
+  department: string;
+  description: string;
+}
 
 interface JobPageClientProps {
   job: Job;
@@ -60,7 +67,7 @@ export default function JobPageClient({ job }: JobPageClientProps) {
       <Section id="apply" className="bg-gray-50">
         <div className="container mx-auto px-4 md:px-6">
           <div className="max-w-4xl mx-auto">
-            <ApplicationForm jobTitle={job.title} />
+            <ApplicationForm jobId={job.id} jobTitle={job.title} />
           </div>
         </div>
       </Section>

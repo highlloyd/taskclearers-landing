@@ -1,31 +1,65 @@
-import { jobOpenings } from '../positions';
+import { notFound } from 'next/navigation';
+import { headers } from 'next/headers';
+import { db, jobs } from '@/lib/db';
+import { eq, and } from 'drizzle-orm';
 import JobPageClient from './JobPageClient';
+import { trackEvent, hashIP, getClientIP } from '@/lib/analytics/tracking';
+import { EVENT_TYPES } from '@/lib/analytics';
 
-export async function generateStaticParams() {
-  return jobOpenings
-    .filter((job) => job.id !== 'general-application')
-    .map((job) => ({
-      id: job.id,
-    }));
+export const dynamic = 'force-dynamic';
+
+interface Props {
+  params: Promise<{ id: string }>;
 }
 
-export async function generateMetadata({ params }: { params: { id: string } }) {
-  const job = jobOpenings.find(j => j.id === params.id);
+async function getJob(id: string) {
+  const [job] = await db
+    .select()
+    .from(jobs)
+    .where(and(eq(jobs.id, id), eq(jobs.isActive, true)))
+    .limit(1);
+
+  if (job) {
+    // Track job view event
+    const headersList = await headers();
+    const clientIp = getClientIP(headersList);
+    await trackEvent(
+      EVENT_TYPES.JOB_VIEW,
+      { page_path: `/careers/${id}` },
+      { jobId: id, ipHash: hashIP(clientIp) }
+    );
+
+    // Keep viewCount updated for backwards compatibility
+    await db
+      .update(jobs)
+      .set({ viewCount: job.viewCount + 1 })
+      .where(eq(jobs.id, id));
+  }
+
+  return job;
+}
+
+export async function generateMetadata({ params }: Props) {
+  const { id } = await params;
+  const job = await getJob(id);
+
   if (!job) {
     return {
       title: 'Job Not Found'
     };
   }
+
   return {
     title: `${job.title} | TaskClearers`
   };
 }
 
-export default function JobPage({ params }: { params: { id: string } }) {
-  const job = jobOpenings.find(j => j.id === params.id);
+export default async function JobPage({ params }: Props) {
+  const { id } = await params;
+  const job = await getJob(id);
 
   if (!job) {
-    return <div>Job not found</div>;
+    notFound();
   }
 
   return <JobPageClient job={job} />;

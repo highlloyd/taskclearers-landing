@@ -1,7 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    output: 'export',
-    trailingSlash: true,
+    output: 'standalone',
     images: {
         unoptimized: true,
         remotePatterns: [
@@ -10,6 +9,11 @@ const nextConfig = {
                 hostname: 'images.unsplash.com',
             },
         ],
+    },
+    experimental: {
+        serverActions: {
+            bodySizeLimit: '10mb',
+        },
     },
 };
 

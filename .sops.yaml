@@ -1,0 +1,9 @@
+# SOPS configuration for age encryption
+#
+# For team access, add multiple public keys separated by commas.
+
+creation_rules:
+  # Encrypt secrets files
+  - path_regex: .*\.enc\.yaml$
+    age: >-
+      age1707hs40zh2xwfwsuf08wg906s26wtn65ntrkgjezekgqvpc27frsjxjl7u
