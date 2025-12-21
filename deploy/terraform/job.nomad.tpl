@@ -5,10 +5,20 @@ job "taskclearers" {
   group "web" {
     count = 1
 
+    # Graceful shutdown
+    shutdown_delay = "5s"
+
     network {
       port "http" {
         to = 3000
       }
+    }
+
+    # Host volume for persistent data (configured on Nomad server)
+    volume "data" {
+      type      = "host"
+      source    = "taskclearers-data"
+      read_only = false
     }
 
     service {
@@ -18,21 +28,33 @@ job "taskclearers" {
 
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.taskclearers.rule=Host(`taskclearers.com`) || Host(`www.taskclearers.com`)",
+        # Main router for non-www
+        "traefik.http.routers.taskclearers.rule=Host(`taskclearers.com`)",
         "traefik.http.routers.taskclearers.entrypoints=websecure",
         "traefik.http.routers.taskclearers.tls.certresolver=letsencrypt",
-        # Redirect www to non-www
-        "traefik.http.middlewares.taskclearers-www-redirect.redirectregex.regex=^https://www\\.taskclearers\\.com/(.*)",
-        "traefik.http.middlewares.taskclearers-www-redirect.redirectregex.replacement=https://taskclearers.com/$$$$1",
-        "traefik.http.middlewares.taskclearers-www-redirect.redirectregex.permanent=true",
-        "traefik.http.routers.taskclearers.middlewares=taskclearers-www-redirect",
+        # WWW router with redirect (priority higher to match first)
+        "traefik.http.routers.taskclearers-www.rule=Host(`www.taskclearers.com`)",
+        "traefik.http.routers.taskclearers-www.entrypoints=websecure",
+        "traefik.http.routers.taskclearers-www.tls.certresolver=letsencrypt",
+        "traefik.http.routers.taskclearers-www.priority=10",
+        "traefik.http.routers.taskclearers-www.middlewares=www-to-nonwww",
+        "traefik.http.middlewares.www-to-nonwww.redirectregex.regex=^https?://www\\.taskclearers\\.com/(.*)",
+        "traefik.http.middlewares.www-to-nonwww.redirectregex.replacement=https://taskclearers.com/$${1}",
+        "traefik.http.middlewares.www-to-nonwww.redirectregex.permanent=true",
       ]
 
+      # Health check using dedicated endpoint
       check {
         type     = "http"
-        path     = "/"
+        path     = "/api/health"
         interval = "30s"
-        timeout  = "5s"
+        timeout  = "10s"
+
+        check_restart {
+          limit           = 3
+          grace           = "60s"
+          ignore_warnings = false
+        }
       }
     }
 
@@ -42,37 +64,50 @@ job "taskclearers" {
       config {
         image = "localhost:5000/taskclearers:${image_tag}"
         ports = ["http"]
-
-        # Persistent volume for SQLite database and uploads
-        volumes = [
-          "/opt/taskclearers/data:/app/data"
-        ]
       }
 
+      # Mount the host volume
+      volume_mount {
+        volume      = "data"
+        destination = "/app/data"
+        read_only   = false
+      }
+
+      # Non-sensitive environment variables
       env {
         NODE_ENV             = "production"
         DATABASE_PATH        = "/app/data/taskclearers.db"
-        JWT_SECRET           = "${jwt_secret}"
         ADMIN_EMAIL_DOMAIN   = "${admin_email_domain}"
-        RESEND_API_KEY       = "${resend_api_key}"
         NOTIFICATION_EMAIL   = "${notification_email}"
-        AZURE_CLIENT_ID      = "${azure_client_id}"
-        AZURE_TENANT_ID      = "${azure_tenant_id}"
-        AZURE_CLIENT_SECRET  = "${azure_client_secret}"
         O365_SHARED_MAILBOX  = "${o365_shared_mailbox}"
         NEXT_PUBLIC_BASE_URL = "https://taskclearers.com"
-        
-        # R2 Storage Configuration
-        AWS_ACCESS_KEY_ID     = "${aws_access_key_id}"
-        AWS_SECRET_ACCESS_KEY = "${aws_secret_access_key}"
-        AWS_ENDPOINT_URL_S3   = "${aws_endpoint_url_s3}"
-        R2_BUCKET_NAME        = "${r2_bucket_name}"
-        AWS_REGION            = "auto"
+
+        # R2 Storage (non-sensitive)
+        AWS_ENDPOINT_URL_S3 = "${aws_endpoint_url_s3}"
+        R2_BUCKET_NAME      = "${r2_bucket_name}"
+        AWS_REGION          = "auto"
+      }
+
+      # Secrets loaded from Nomad Variables (not visible in job spec)
+      template {
+        data        = <<-EOF
+          {{ with nomadVar "nomad/jobs/taskclearers" }}
+          JWT_SECRET={{ .jwt_secret }}
+          RESEND_API_KEY={{ .resend_api_key }}
+          AZURE_CLIENT_ID={{ .azure_client_id }}
+          AZURE_TENANT_ID={{ .azure_tenant_id }}
+          AZURE_CLIENT_SECRET={{ .azure_client_secret }}
+          AWS_ACCESS_KEY_ID={{ .aws_access_key_id }}
+          AWS_SECRET_ACCESS_KEY={{ .aws_secret_access_key }}
+          {{ end }}
+        EOF
+        destination = "secrets/env.env"
+        env         = true
       }
 
       resources {
-        cpu    = 500
-        memory = 512
+        cpu    = 1000
+        memory = 1024
       }
     }
   }
