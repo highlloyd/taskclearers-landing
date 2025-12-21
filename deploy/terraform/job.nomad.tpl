@@ -39,7 +39,7 @@ job "taskclearers" {
         "traefik.http.routers.taskclearers-www.priority=10",
         "traefik.http.routers.taskclearers-www.middlewares=www-to-nonwww",
         "traefik.http.middlewares.www-to-nonwww.redirectregex.regex=^https?://www\\.taskclearers\\.com/(.*)",
-        "traefik.http.middlewares.www-to-nonwww.redirectregex.replacement=https://taskclearers.com/$${1}",
+        "traefik.http.middlewares.www-to-nonwww.redirectregex.replacement=https://taskclearers.com/$$$${1}",
         "traefik.http.middlewares.www-to-nonwww.redirectregex.permanent=true",
       ]
 
