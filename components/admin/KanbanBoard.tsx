@@ -45,7 +45,7 @@ function KanbanColumn({ status, applications }: KanbanColumnProps) {
   return (
     <div
       ref={setNodeRef}
-      className={`flex flex-col min-w-[280px] max-w-[280px] bg-gray-50 rounded-lg border-t-4 ${columnColors[status]} ${
+      className={`flex flex-col min-w-[260px] w-[260px] md:min-w-[280px] md:w-[280px] bg-gray-50 rounded-lg border-t-4 snap-start ${columnColors[status]} ${
         isOver ? 'bg-gray-100' : ''
       }`}
     >
@@ -57,7 +57,7 @@ function KanbanColumn({ status, applications }: KanbanColumnProps) {
           </span>
         </div>
       </div>
-      <div className="flex-1 p-2 space-y-2 overflow-y-auto max-h-[calc(100vh-280px)]">
+      <div className="flex-1 p-2 space-y-2 overflow-y-auto max-h-[50vh] md:max-h-[calc(100vh-280px)]">
         <SortableContext
           items={applications.map((a) => a.id)}
           strategy={verticalListSortingStrategy}
@@ -169,7 +169,7 @@ export default function KanbanBoard({ applications, onStatusChange }: KanbanBoar
       onDragOver={handleDragOver}
       onDragEnd={handleDragEnd}
     >
-      <div className="flex gap-4 overflow-x-auto pb-4">
+      <div className="flex gap-3 md:gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scroll-pl-4 -mx-4 px-4 md:mx-0 md:px-0">
         {STATUSES.map((status) => (
           <KanbanColumn
             key={status}

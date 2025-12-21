@@ -26,22 +26,28 @@ job "taskclearers" {
       port     = "http"
       provider = "nomad"
 
-      tags = [
-        "traefik.enable=true",
-        # Main router for non-www
-        "traefik.http.routers.taskclearers.rule=Host(`taskclearers.com`)",
-        "traefik.http.routers.taskclearers.entrypoints=websecure",
-        "traefik.http.routers.taskclearers.tls.certresolver=letsencrypt",
-        # WWW router with redirect (priority higher to match first)
-        "traefik.http.routers.taskclearers-www.rule=Host(`www.taskclearers.com`)",
-        "traefik.http.routers.taskclearers-www.entrypoints=websecure",
-        "traefik.http.routers.taskclearers-www.tls.certresolver=letsencrypt",
-        "traefik.http.routers.taskclearers-www.priority=10",
-        "traefik.http.routers.taskclearers-www.middlewares=www-to-nonwww",
-        "traefik.http.middlewares.www-to-nonwww.redirectregex.regex=^https?://www\\.taskclearers\\.com/(.*)",
-        "traefik.http.middlewares.www-to-nonwww.redirectregex.replacement=https://taskclearers.com/$$$${1}",
-        "traefik.http.middlewares.www-to-nonwww.redirectregex.permanent=true",
-      ]
+tags = [
+  "traefik.enable=true",
+
+  # Main router (non-www)
+  "traefik.http.routers.taskclearers.rule=Host(`taskclearers.com`)",
+  "traefik.http.routers.taskclearers.entrypoints=websecure",
+  "traefik.http.routers.taskclearers.tls.certresolver=letsencrypt",
+
+  # WWW router (redirects to non-www)
+  "traefik.http.routers.taskclearers-www.rule=Host(`www.taskclearers.com`)",
+  "traefik.http.routers.taskclearers-www.entrypoints=websecure",
+  "traefik.http.routers.taskclearers-www.tls.certresolver=letsencrypt",
+  "traefik.http.routers.taskclearers-www.priority=10",
+  "traefik.http.routers.taskclearers-www.middlewares=www-to-nonwww",
+
+  # Redirect middleware
+  "traefik.http.middlewares.www-to-nonwww.redirectregex.regex=^https?://www\\.taskclearers\\.com/?(.*)",
+  "traefik.http.middlewares.www-to-nonwww.redirectregex.replacement=https://taskclearers.com/$1",
+  "traefik.http.middlewares.www-to-nonwww.redirectregex.permanent=true"
+]
+
+
 
       # Health check using dedicated endpoint
       check {
@@ -86,6 +92,14 @@ job "taskclearers" {
         AWS_ENDPOINT_URL_S3 = "${aws_endpoint_url_s3}"
         R2_BUCKET_NAME      = "${r2_bucket_name}"
         AWS_REGION          = "auto"
+
+        # Email Identities
+        EMAIL_ADMIN       = "${email_admin}"
+        EMAIL_ADMIN_NAME  = "${email_admin_name}"
+        EMAIL_SALES       = "${email_sales}"
+        EMAIL_SALES_NAME  = "${email_sales_name}"
+        EMAIL_HIRING      = "${email_hiring}"
+        EMAIL_HIRING_NAME = "${email_hiring_name}"
       }
 
       # Secrets loaded from Nomad Variables (not visible in job spec)
@@ -93,7 +107,6 @@ job "taskclearers" {
         data        = <<-EOF
           {{ with nomadVar "nomad/jobs/taskclearers" }}
           JWT_SECRET={{ .jwt_secret }}
-          RESEND_API_KEY={{ .resend_api_key }}
           AZURE_CLIENT_ID={{ .azure_client_id }}
           AZURE_TENANT_ID={{ .azure_tenant_id }}
           AZURE_CLIENT_SECRET={{ .azure_client_secret }}

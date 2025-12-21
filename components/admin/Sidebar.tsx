@@ -63,9 +63,10 @@ interface SidebarProps {
     email: string;
   };
   permissions: Permission[];
+  onNavigate?: () => void;
 }
 
-export default function Sidebar({ user, permissions }: SidebarProps) {
+export default function Sidebar({ user, permissions, onNavigate }: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
 
@@ -104,6 +105,7 @@ export default function Sidebar({ user, permissions }: SidebarProps) {
               <Link
                 key={item.name}
                 href={item.href}
+                onClick={onNavigate}
                 className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                   isActive
                     ? 'bg-green-600 text-white'

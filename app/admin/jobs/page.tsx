@@ -33,11 +33,11 @@ export default async function JobsPage() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">Jobs</h1>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 md:mb-8">
+        <h1 className="text-xl md:text-2xl font-bold text-gray-900">Jobs</h1>
         <Link
           href="/admin/jobs/new"
-          className="inline-flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+          className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-medium"
         >
           <Plus className="w-4 h-4" />
           Add Job
@@ -45,7 +45,47 @@ export default async function JobsPage() {
       </div>
 
       <div className="bg-white rounded-lg shadow">
-        <div className="overflow-x-auto">
+        {/* Mobile card view */}
+        <div className="md:hidden divide-y divide-gray-200">
+          {allJobs.length === 0 ? (
+            <div className="px-4 py-8 text-center text-gray-500">
+              No jobs yet. <Link href="/admin/jobs/new" className="text-green-600 hover:text-green-700">Create your first job</Link>
+            </div>
+          ) : (
+            allJobs.map((job) => (
+              <Link
+                key={job.id}
+                href={`/admin/jobs/${job.id}/edit`}
+                className="block px-4 py-3 hover:bg-gray-50"
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0 flex-1">
+                    <p className="font-medium text-gray-900 truncate">{job.title}</p>
+                    <p className="text-sm text-gray-500">{job.department}</p>
+                    <div className="flex items-center gap-3 mt-2 text-xs text-gray-400">
+                      <span>{countMap[job.id] || 0} applications</span>
+                      <span>{job.viewCount} views</span>
+                    </div>
+                  </div>
+                  {job.isActive ? (
+                    <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                      <Eye className="w-3 h-3" />
+                      Active
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                      <EyeOff className="w-3 h-3" />
+                      Hidden
+                    </span>
+                  )}
+                </div>
+              </Link>
+            ))
+          )}
+        </div>
+
+        {/* Desktop table view */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full">
             <thead className="bg-gray-50 border-b border-gray-200">
               <tr>

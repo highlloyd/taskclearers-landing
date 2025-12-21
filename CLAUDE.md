@@ -32,7 +32,7 @@ npm run migrate:permissions  # Migrate user permissions
 - **Next.js 14** with App Router (not static export - uses server actions and API routes)
 - **SQLite** with Drizzle ORM (`./data/taskclearers.db`)
 - **Authentication**: Magic link login via JWT tokens (stored in `session` cookie)
-- **Email**: Resend for admin notifications, Microsoft Graph API for applicant communication
+- **Email**: Microsoft Graph API for all email (magic links, notifications, applicant/employee/sales communication)
 
 ### Directory Structure
 
@@ -63,8 +63,8 @@ lib/
 │   ├── middleware.ts          # Route protection helpers
 │   └── rate-limit.ts          # Login rate limiting
 ├── email/
-│   ├── index.ts               # Resend integration
-│   ├── microsoft-graph.ts     # O365 email sending/syncing
+│   ├── index.ts               # Magic link and notification emails
+│   ├── microsoft-graph.ts     # O365 email sending/syncing (multi-mailbox support)
 │   └── templates.ts           # Template rendering
 └── upload/
     └── index.ts               # File upload handling
@@ -92,8 +92,8 @@ Key tables in `lib/db/schema.ts`:
 ### Authentication Flow
 
 1. User enters email at `/admin/login`
-2. If email domain matches `ADMIN_EMAIL_DOMAIN`, magic link is sent via Resend
-3. Link contains token verified at `/api/auth/verify`
+2. If email domain matches `ADMIN_EMAIL_DOMAIN`, magic code is sent via Microsoft Graph
+3. Code verified at `/api/auth/verify`
 4. JWT session created and stored in `session` cookie
 5. Middleware (`middleware.ts`) protects all `/admin/*` routes except `/admin/login`
 
@@ -119,8 +119,9 @@ Copy `.env.example` to `.env` and configure:
 - `DATABASE_PATH` - SQLite file location
 - `JWT_SECRET` - Required in production (32+ chars)
 - `ADMIN_EMAIL_DOMAIN` - Allowed domain for admin logins
-- `RESEND_API_KEY` - For magic link emails
-- `AZURE_*` - Microsoft Graph for applicant emails
+- `AZURE_*` - Microsoft Graph credentials (CLIENT_ID, TENANT_ID, CLIENT_SECRET)
+- `EMAIL_ADMIN`, `EMAIL_SALES`, `EMAIL_HIRING` - Mailbox addresses for different purposes
+- `NOTIFICATION_EMAIL` - Receives new application alerts
 - `NEXT_PUBLIC_BASE_URL` - For magic link URLs
 
 ## Common Patterns

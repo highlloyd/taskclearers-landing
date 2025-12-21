@@ -69,7 +69,7 @@ export default function NewSalesLeadPage() {
       </Link>
 
       <div className="max-w-3xl">
-        <h1 className="text-2xl font-bold text-gray-900 mb-8">Add New Lead</h1>
+        <h1 className="text-xl md:text-2xl font-bold text-gray-900 mb-6 md:mb-8">Add New Lead</h1>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {error && (

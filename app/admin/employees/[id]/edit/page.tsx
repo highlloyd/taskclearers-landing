@@ -153,7 +153,7 @@ export default function EditEmployeePage() {
       </Link>
 
       <div className="max-w-3xl">
-        <h1 className="text-2xl font-bold text-gray-900 mb-8">
+        <h1 className="text-xl md:text-2xl font-bold text-gray-900 mb-6 md:mb-8">
           Edit {employee.firstName} {employee.lastName}
         </h1>
 

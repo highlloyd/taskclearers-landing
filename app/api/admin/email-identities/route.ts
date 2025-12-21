@@ -5,7 +5,7 @@ import { getEmailIdentities, getDefaultIdentity, type EmailIdentityConfig } from
 
 // GET /api/admin/email-identities - Get available email identities
 export async function GET(request: Request) {
-  const { error } = await requirePermission(PERMISSIONS.VIEW_APPLICATIONS);
+  const { error, session } = await requirePermission(PERMISSIONS.VIEW_APPLICATIONS);
   if (error) return error;
 
   try {
@@ -15,13 +15,29 @@ export async function GET(request: Request) {
     const identities = getEmailIdentities();
     const defaultIdentity = context ? getDefaultIdentity(context) : identities[0] || null;
 
+    // Build the identities list
+    const identityList = identities.map((identity: EmailIdentityConfig) => ({
+      id: identity.id,
+      email: identity.email,
+      name: identity.name,
+      label: identity.label,
+    }));
+
+    // Add the current user's email as a personal identity option if it's not already in the list
+    const userEmail = session?.user.email;
+    const userName = session?.user.name || userEmail?.split('@')[0] || 'User';
+
+    if (userEmail && !identityList.some(i => i.email.toLowerCase() === userEmail.toLowerCase())) {
+      identityList.unshift({
+        id: 'personal',
+        email: userEmail,
+        name: userName,
+        label: `${userName} (Personal)`,
+      });
+    }
+
     return NextResponse.json({
-      identities: identities.map((identity: EmailIdentityConfig) => ({
-        id: identity.id,
-        email: identity.email,
-        name: identity.name,
-        label: identity.label,
-      })),
+      identities: identityList,
       default: defaultIdentity ? defaultIdentity.email : null,
     });
   } catch (err) {

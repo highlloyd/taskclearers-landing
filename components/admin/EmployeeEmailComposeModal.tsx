@@ -11,6 +11,13 @@ interface EmailTemplate {
   triggerStatus: string | null;
 }
 
+interface EmailIdentity {
+  id: string;
+  email: string;
+  name: string;
+  label: string;
+}
+
 interface EmployeeEmailComposeModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -40,13 +47,31 @@ export default function EmployeeEmailComposeModal({
   const [previewing, setPreviewing] = useState(false);
   const [previewHtml, setPreviewHtml] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [emailIdentities, setEmailIdentities] = useState<EmailIdentity[]>([]);
+  const [selectedFrom, setSelectedFrom] = useState<string>('');
 
-  // Fetch templates on mount
+  // Fetch templates and email identities on mount
   useEffect(() => {
     if (isOpen) {
       fetchTemplates();
+      fetchEmailIdentities();
     }
   }, [isOpen]);
+
+  async function fetchEmailIdentities() {
+    try {
+      const res = await fetch('/api/admin/email-identities?context=admin');
+      if (res.ok) {
+        const data = await res.json();
+        setEmailIdentities(data.identities);
+        if (data.default && !selectedFrom) {
+          setSelectedFrom(data.default);
+        }
+      }
+    } catch (err) {
+      console.error('Failed to fetch email identities:', err);
+    }
+  }
 
   async function fetchTemplates() {
     try {
@@ -122,6 +147,7 @@ export default function EmployeeEmailComposeModal({
           templateId: selectedTemplateId || null,
           subject,
           body,
+          from: selectedFrom || undefined,
         }),
       });
 
@@ -177,6 +203,26 @@ export default function EmployeeEmailComposeModal({
           {error && (
             <div className="p-3 bg-red-50 text-red-700 rounded-lg text-sm">
               {error}
+            </div>
+          )}
+
+          {/* Send As Selector */}
+          {emailIdentities.length > 0 && (
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Send As
+              </label>
+              <select
+                value={selectedFrom}
+                onChange={(e) => setSelectedFrom(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 text-gray-900 bg-white"
+              >
+                {emailIdentities.map((identity) => (
+                  <option key={identity.email} value={identity.email}>
+                    {identity.label} ({identity.email})
+                  </option>
+                ))}
+              </select>
             </div>
           )}
 

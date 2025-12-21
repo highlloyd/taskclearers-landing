@@ -58,7 +58,7 @@ export default function NewJobPage() {
       </Link>
 
       <div className="max-w-2xl">
-        <h1 className="text-2xl font-bold text-gray-900 mb-8">Create New Job</h1>
+        <h1 className="text-xl md:text-2xl font-bold text-gray-900 mb-6 md:mb-8">Create New Job</h1>
 
         <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow p-6 space-y-6">
           {error && (

@@ -1,7 +1,7 @@
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { getSession, hasAnyPermission, Permission } from '@/lib/auth';
-import Sidebar from '@/components/admin/Sidebar';
+import AdminLayoutClient from '@/components/admin/AdminLayoutClient';
 
 // Pages that don't require authentication or sidebar
 const publicPaths = ['/admin/login', '/admin/verify'];
@@ -72,20 +72,17 @@ export default async function AdminLayout({
   if (isNoSidebarPage) {
     return (
       <div className="min-h-screen bg-gray-100">
-        <div className="p-8">{children}</div>
+        <div className="p-4 md:p-6 lg:p-8">{children}</div>
       </div>
     );
   }
 
   return (
-    <div className="flex h-screen bg-gray-100">
-      <Sidebar
-        user={{ name: session.user.name, email: session.user.email }}
-        permissions={session.permissions}
-      />
-      <main className="flex-1 overflow-auto">
-        <div className="p-8">{children}</div>
-      </main>
-    </div>
+    <AdminLayoutClient
+      user={{ name: session.user.name, email: session.user.email }}
+      permissions={session.permissions}
+    >
+      {children}
+    </AdminLayoutClient>
   );
 }

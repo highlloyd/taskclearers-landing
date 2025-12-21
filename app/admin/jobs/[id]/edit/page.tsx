@@ -131,12 +131,12 @@ export default function EditJobPage() {
       </Link>
 
       <div className="max-w-2xl">
-        <div className="flex items-center justify-between mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">Edit Job</h1>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 md:mb-8">
+          <h1 className="text-xl md:text-2xl font-bold text-gray-900">Edit Job</h1>
           <button
             onClick={handleDelete}
             disabled={saving}
-            className="inline-flex items-center gap-2 px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg"
+            className="inline-flex items-center justify-center gap-2 px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg text-sm font-medium"
           >
             <Trash2 className="w-4 h-4" />
             Delete

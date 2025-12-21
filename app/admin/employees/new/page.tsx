@@ -136,7 +136,7 @@ export default function NewEmployeePage() {
       </Link>
 
       <div className="max-w-3xl">
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">
+        <h1 className="text-xl md:text-2xl font-bold text-gray-900 mb-2">
           {fromApplication ? 'Convert Application to Employee' : 'Add New Employee'}
         </h1>
         {fromApplication && (

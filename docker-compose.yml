@@ -1,25 +1,14 @@
+# Local development only - use Terraform for production deployments
 services:
   app:
     build: .
     ports:
       - "3000:3000"
     volumes:
-      # Persistent volume for SQLite database and uploads
-      - app_data:/app/data
+      # Local bind mount for development (ensures correct permissions)
+      - ./data:/app/data
+    env_file:
+      - .env
     environment:
-      - NODE_ENV=production
-      - DATABASE_PATH=/app/data/taskclearers.db
-      - JWT_SECRET=${JWT_SECRET}
-      - ADMIN_EMAIL_DOMAIN=${ADMIN_EMAIL_DOMAIN}
-      - RESEND_API_KEY=${RESEND_API_KEY}
-      - NOTIFICATION_EMAIL=${NOTIFICATION_EMAIL}
-      - AZURE_CLIENT_ID=${AZURE_CLIENT_ID}
-      - AZURE_TENANT_ID=${AZURE_TENANT_ID}
-      - AZURE_CLIENT_SECRET=${AZURE_CLIENT_SECRET}
-      - O365_SHARED_MAILBOX=${O365_SHARED_MAILBOX}
-      - NEXT_PUBLIC_BASE_URL=${NEXT_PUBLIC_BASE_URL}
+      - NODE_ENV=development
     restart: unless-stopped
-
-volumes:
-  app_data:
-    # Named volume persists across container restarts and rebuilds

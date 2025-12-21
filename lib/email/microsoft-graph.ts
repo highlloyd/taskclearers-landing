@@ -1,7 +1,7 @@
 import { ConfidentialClientApplication } from '@azure/msal-node';
 
 // Email identity types
-export type EmailIdentity = 'admin' | 'sales' | 'hiring';
+export type EmailIdentity = 'admin' | 'sales' | 'hiring' | 'personal';
 
 export interface EmailIdentityConfig {
   id: EmailIdentity;

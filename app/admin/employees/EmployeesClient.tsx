@@ -62,11 +62,11 @@ export default function EmployeesClient({ initialEmployees, departments }: Emplo
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">Employees</h1>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 md:mb-8">
+        <h1 className="text-xl md:text-2xl font-bold text-gray-900">Employees</h1>
         <Link
           href="/admin/employees/new"
-          className="inline-flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+          className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-medium"
         >
           <Plus className="w-4 h-4" />
           Add Employee
@@ -74,9 +74,9 @@ export default function EmployeesClient({ initialEmployees, departments }: Emplo
       </div>
 
       {/* Filters */}
-      <div className="bg-white rounded-lg shadow p-4 mb-6">
-        <div className="flex flex-wrap gap-4 items-center">
-          <div className="flex-1 min-w-[200px]">
+      <div className="bg-white rounded-lg shadow p-3 md:p-4 mb-6">
+        <div className="space-y-3 md:space-y-0 md:flex md:flex-wrap md:gap-4 md:items-center">
+          <div className="w-full md:flex-1 md:min-w-[200px]">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
               <input
@@ -84,37 +84,39 @@ export default function EmployeesClient({ initialEmployees, departments }: Emplo
                 placeholder="Search by name, email, or role..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-2.5 md:py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
               />
             </div>
           </div>
 
-          <select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-          >
-            <option value="">All Statuses</option>
-            <option value="active">Active</option>
-            <option value="on_leave">On Leave</option>
-            <option value="terminated">Terminated</option>
-          </select>
+          <div className="grid grid-cols-2 gap-2 md:flex md:gap-4">
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className="w-full md:w-auto px-3 py-2.5 md:py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
+            >
+              <option value="">All Statuses</option>
+              <option value="active">Active</option>
+              <option value="on_leave">On Leave</option>
+              <option value="terminated">Terminated</option>
+            </select>
 
-          <select
-            value={departmentFilter}
-            onChange={(e) => setDepartmentFilter(e.target.value)}
-            className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-          >
-            <option value="">All Departments</option>
-            {departments.map((dept) => (
-              <option key={dept} value={dept}>{dept}</option>
-            ))}
-          </select>
+            <select
+              value={departmentFilter}
+              onChange={(e) => setDepartmentFilter(e.target.value)}
+              className="w-full md:w-auto px-3 py-2.5 md:py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
+            >
+              <option value="">All Departments</option>
+              {departments.map((dept) => (
+                <option key={dept} value={dept}>{dept}</option>
+              ))}
+            </select>
+          </div>
 
           {hasFilters && (
             <button
               onClick={clearFilters}
-              className="inline-flex items-center gap-1 px-3 py-2 text-sm text-gray-600 hover:text-gray-900"
+              className="inline-flex items-center justify-center gap-1 w-full md:w-auto px-3 py-2 text-sm text-gray-600 hover:text-gray-900"
             >
               <X className="w-4 h-4" />
               Clear
@@ -149,7 +151,40 @@ export default function EmployeesClient({ initialEmployees, departments }: Emplo
 
       {/* Table */}
       <div className="bg-white rounded-lg shadow">
-        <div className="overflow-x-auto">
+        {/* Mobile card view */}
+        <div className="md:hidden divide-y divide-gray-200">
+          {filteredEmployees.length === 0 ? (
+            <div className="px-4 py-8 text-center text-gray-500">
+              {hasFilters ? (
+                <>No employees match your filters. <button onClick={clearFilters} className="text-green-600 hover:text-green-700">Clear filters</button></>
+              ) : (
+                <>No employees yet. <Link href="/admin/employees/new" className="text-green-600 hover:text-green-700">Add your first employee</Link></>
+              )}
+            </div>
+          ) : (
+            filteredEmployees.map((employee) => (
+              <Link
+                key={employee.id}
+                href={`/admin/employees/${employee.id}`}
+                className="block px-4 py-3 hover:bg-gray-50"
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0 flex-1">
+                    <p className="font-medium text-gray-900 truncate">
+                      {employee.firstName} {employee.lastName}
+                    </p>
+                    <p className="text-sm text-gray-500">{employee.role}</p>
+                    <p className="text-xs text-gray-400 mt-1">{employee.department}</p>
+                  </div>
+                  <EmployeeStatusBadge status={employee.status} />
+                </div>
+              </Link>
+            ))
+          )}
+        </div>
+
+        {/* Desktop table view */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full">
             <thead className="bg-gray-50 border-b border-gray-200">
               <tr>

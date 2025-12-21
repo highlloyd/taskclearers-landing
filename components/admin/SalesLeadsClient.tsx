@@ -133,9 +133,9 @@ export default function SalesLeadsClient({ leads, sources, assignees }: SalesLea
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">Sales Pipeline</h1>
-        <div className="flex items-center gap-3">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 md:mb-8">
+        <h1 className="text-xl md:text-2xl font-bold text-gray-900">Sales Pipeline</h1>
+        <div className="flex items-center gap-2 sm:gap-3">
           <div className="flex rounded-lg border border-gray-300 overflow-hidden">
             <button
               onClick={() => setView('table')}
@@ -196,9 +196,9 @@ export default function SalesLeadsClient({ leads, sources, assignees }: SalesLea
 
       {view === 'table' && (
         <div className="bg-white rounded-lg shadow mb-6">
-          <div className="p-4 border-b border-gray-200">
-            <form onSubmit={handleFilter} className="flex flex-wrap gap-4">
-              <div className="flex-1 min-w-[200px]">
+          <div className="p-3 md:p-4 border-b border-gray-200">
+            <form onSubmit={handleFilter} className="space-y-3 md:space-y-0 md:flex md:flex-wrap md:gap-4">
+              <div className="w-full md:flex-1 md:min-w-[200px]">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                   <input
@@ -206,64 +206,109 @@ export default function SalesLeadsClient({ leads, sources, assignees }: SalesLea
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     placeholder="Search by company, contact, or email..."
-                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 text-gray-900 bg-white"
+                    className="w-full pl-10 pr-4 py-2.5 md:py-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 text-gray-900 bg-white"
                   />
                 </div>
               </div>
-              <select
-                value={stage}
-                onChange={(e) => setStage(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 text-gray-900 bg-white"
-              >
-                <option value="">All Stages</option>
-                <option value="new">New</option>
-                <option value="contacted">Contacted</option>
-                <option value="qualified">Qualified</option>
-                <option value="proposal">Proposal</option>
-                <option value="negotiation">Negotiation</option>
-                <option value="won">Won</option>
-                <option value="lost">Lost</option>
-              </select>
-              <select
-                value={source}
-                onChange={(e) => setSource(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 text-gray-900 bg-white"
-              >
-                <option value="">All Sources</option>
-                {sources.map((s) => (
-                  <option key={s} value={s}>{s}</option>
-                ))}
-              </select>
-              <select
-                value={assignee}
-                onChange={(e) => setAssignee(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 text-gray-900 bg-white"
-              >
-                <option value="">All Assignees</option>
-                {assignees.map((a) => (
-                  <option key={a.id} value={a.name || a.id}>{a.name || a.id}</option>
-                ))}
-              </select>
-              <button
-                type="submit"
-                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
-              >
-                Filter
-              </button>
-              {hasFilters && (
-                <button
-                  type="button"
-                  onClick={clearFilters}
-                  className="inline-flex items-center gap-1 px-3 py-2 text-sm text-gray-600 hover:text-gray-900"
+              <div className="grid grid-cols-3 gap-2 md:flex md:gap-4">
+                <select
+                  value={stage}
+                  onChange={(e) => setStage(e.target.value)}
+                  className="w-full md:w-auto px-2 md:px-4 py-2.5 md:py-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 text-gray-900 bg-white text-sm"
                 >
-                  <X className="w-4 h-4" />
-                  Clear
+                  <option value="">All Stages</option>
+                  <option value="new">New</option>
+                  <option value="contacted">Contacted</option>
+                  <option value="qualified">Qualified</option>
+                  <option value="proposal">Proposal</option>
+                  <option value="negotiation">Negotiation</option>
+                  <option value="won">Won</option>
+                  <option value="lost">Lost</option>
+                </select>
+                <select
+                  value={source}
+                  onChange={(e) => setSource(e.target.value)}
+                  className="w-full md:w-auto px-2 md:px-4 py-2.5 md:py-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 text-gray-900 bg-white text-sm"
+                >
+                  <option value="">All Sources</option>
+                  {sources.map((s) => (
+                    <option key={s} value={s}>{s}</option>
+                  ))}
+                </select>
+                <select
+                  value={assignee}
+                  onChange={(e) => setAssignee(e.target.value)}
+                  className="w-full md:w-auto px-2 md:px-4 py-2.5 md:py-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 text-gray-900 bg-white text-sm"
+                >
+                  <option value="">All Assignees</option>
+                  {assignees.map((a) => (
+                    <option key={a.id} value={a.name || a.id}>{a.name || a.id}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="flex gap-2 md:gap-4">
+                <button
+                  type="submit"
+                  className="flex-1 md:flex-none px-4 py-2.5 md:py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium"
+                >
+                  Filter
                 </button>
-              )}
+                {hasFilters && (
+                  <button
+                    type="button"
+                    onClick={clearFilters}
+                    className="inline-flex items-center justify-center gap-1 px-3 py-2 text-sm text-gray-600 hover:text-gray-900"
+                  >
+                    <X className="w-4 h-4" />
+                    Clear
+                  </button>
+                )}
+              </div>
             </form>
           </div>
 
-          <div className="overflow-x-auto">
+          {/* Mobile card view */}
+          <div className="md:hidden divide-y divide-gray-200">
+            {filteredLeads.length === 0 ? (
+              <div className="px-4 py-8 text-center text-gray-500">
+                {hasFilters ? (
+                  <>No leads match your filters. <button onClick={clearFilters} className="text-green-600 hover:text-green-700">Clear filters</button></>
+                ) : (
+                  <>No leads yet. <Link href="/admin/sales/new" className="text-green-600 hover:text-green-700">Add your first lead</Link></>
+                )}
+              </div>
+            ) : (
+              filteredLeads.map((lead) => (
+                <Link
+                  key={lead.id}
+                  href={`/admin/sales/${lead.id}`}
+                  className="block px-4 py-3 hover:bg-gray-50"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-2">
+                        <Building className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                        <p className="font-medium text-gray-900 truncate">{lead.companyName}</p>
+                      </div>
+                      <p className="text-sm text-gray-500 mt-1">{lead.contactName}</p>
+                      <div className="flex items-center gap-3 mt-2 text-xs text-gray-400">
+                        {lead.estimatedValue && (
+                          <span className="text-green-600 font-medium">
+                            {formatCurrency(lead.estimatedValue, lead.currency || 'USD')}
+                          </span>
+                        )}
+                        <span>{lead.createdAt?.toLocaleDateString()}</span>
+                      </div>
+                    </div>
+                    <SalesLeadStatusBadge stage={lead.stage} />
+                  </div>
+                </Link>
+              ))
+            )}
+          </div>
+
+          {/* Desktop table view */}
+          <div className="hidden md:block overflow-x-auto">
             <table className="w-full">
               <thead className="bg-gray-50 border-b border-gray-200">
                 <tr>

@@ -101,7 +101,7 @@ export async function POST(request: Request, context: Context) {
   try {
     const { id: applicationId } = await context.params;
     const body = await request.json();
-    const { templateId, subject, body: emailBody, from } = body;
+    const { templateId, subject, body: emailBody, from, fromName } = body;
 
     if (!subject || !emailBody) {
       return NextResponse.json(
@@ -155,6 +155,8 @@ export async function POST(request: Request, context: Context) {
 
     // Determine which email identity to use
     const fromEmail = from || getDefaultIdentity('hiring')?.email;
+    // Use provided fromName, or fall back to the current user's name for personal emails
+    const senderName = fromName || (from === session?.user.email ? session?.user.name : undefined);
 
     // Send the email
     try {
@@ -163,6 +165,7 @@ export async function POST(request: Request, context: Context) {
         subject: rendered.subject,
         body: rendered.body,
         from: fromEmail,
+        fromName: senderName,
       });
 
       // Update email status to sent

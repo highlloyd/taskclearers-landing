@@ -122,9 +122,9 @@ export default function ApplicationsClient({ applications, jobs }: ApplicationsC
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">Applications</h1>
-        <div className="flex items-center gap-3">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 md:mb-8">
+        <h1 className="text-xl md:text-2xl font-bold text-gray-900">Applications</h1>
+        <div className="flex items-center gap-2 sm:gap-3">
           <div className="flex rounded-lg border border-gray-300 overflow-hidden">
             <button
               onClick={() => setView('table')}
@@ -161,9 +161,9 @@ export default function ApplicationsClient({ applications, jobs }: ApplicationsC
 
       {view === 'table' && (
         <div className="bg-white rounded-lg shadow mb-6">
-          <div className="p-4 border-b border-gray-200">
-            <form onSubmit={handleFilter} className="flex flex-wrap gap-4">
-              <div className="flex-1 min-w-[200px]">
+          <div className="p-3 md:p-4 border-b border-gray-200">
+            <form onSubmit={handleFilter} className="space-y-3 md:space-y-0 md:flex md:flex-wrap md:gap-4">
+              <div className="w-full md:flex-1 md:min-w-[200px]">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                   <input
@@ -171,70 +171,103 @@ export default function ApplicationsClient({ applications, jobs }: ApplicationsC
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     placeholder="Search by name or email..."
-                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 text-gray-900 bg-white"
+                    className="w-full pl-10 pr-4 py-2.5 md:py-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 text-gray-900 bg-white"
                   />
                 </div>
               </div>
-              <select
-                value={status}
-                onChange={(e) => setStatus(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 text-gray-900 bg-white"
-              >
-                <option value="">All Statuses</option>
-                <option value="new">New</option>
-                <option value="reviewing">Reviewing</option>
-                <option value="interviewed">Interviewed</option>
-                <option value="offered">Offered</option>
-                <option value="hired">Hired</option>
-                <option value="rejected">Rejected</option>
-              </select>
-              <select
-                value={job}
-                onChange={(e) => setJob(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 text-gray-900 bg-white"
-              >
-                <option value="">All Jobs</option>
-                {jobs.map((j) => (
-                  <option key={j.id} value={j.id}>
-                    {j.title}
-                  </option>
-                ))}
-              </select>
-              <div className="flex items-center gap-2">
+              <div className="grid grid-cols-2 gap-2 md:flex md:gap-4">
+                <select
+                  value={status}
+                  onChange={(e) => setStatus(e.target.value)}
+                  className="w-full md:w-auto px-3 md:px-4 py-2.5 md:py-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 text-gray-900 bg-white text-sm"
+                >
+                  <option value="">All Statuses</option>
+                  <option value="new">New</option>
+                  <option value="reviewing">Reviewing</option>
+                  <option value="interviewed">Interviewed</option>
+                  <option value="offered">Offered</option>
+                  <option value="hired">Hired</option>
+                  <option value="rejected">Rejected</option>
+                </select>
+                <select
+                  value={job}
+                  onChange={(e) => setJob(e.target.value)}
+                  className="w-full md:w-auto px-3 md:px-4 py-2.5 md:py-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 text-gray-900 bg-white text-sm"
+                >
+                  <option value="">All Jobs</option>
+                  {jobs.map((j) => (
+                    <option key={j.id} value={j.id}>
+                      {j.title}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="grid grid-cols-2 gap-2 md:flex md:items-center md:gap-2">
                 <div className="relative">
                   <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
                   <input
                     type="date"
                     value={dateFrom}
                     onChange={(e) => setDateFrom(e.target.value)}
-                    className="pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 text-gray-900 bg-white"
-                    placeholder="From"
+                    className="w-full pl-10 pr-2 py-2.5 md:py-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 text-gray-900 bg-white text-sm"
                     title="From date"
                   />
                 </div>
-                <span className="text-gray-400">–</span>
                 <div className="relative">
                   <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
                   <input
                     type="date"
                     value={dateTo}
                     onChange={(e) => setDateTo(e.target.value)}
-                    className="pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 text-gray-900 bg-white"
-                    placeholder="To"
+                    className="w-full pl-10 pr-2 py-2.5 md:py-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 text-gray-900 bg-white text-sm"
                     title="To date"
                   />
                 </div>
               </div>
               <button
                 type="submit"
-                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                className="w-full md:w-auto px-4 py-2.5 md:py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium"
               >
                 Filter
               </button>
             </form>
           </div>
 
-          <div className="overflow-x-auto">
+          {/* Mobile card view */}
+          <div className="md:hidden divide-y divide-gray-200">
+            {filteredApplications.length === 0 ? (
+              <div className="px-4 py-8 text-center text-gray-500">
+                No applications found
+              </div>
+            ) : (
+              filteredApplications.map((app) => (
+                <Link
+                  key={app.id}
+                  href={`/admin/applications/${app.id}`}
+                  className={`block px-4 py-3 hover:bg-gray-50 ${app.hasReply ? 'bg-blue-50/30' : ''}`}
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-2">
+                        <p className="font-medium text-gray-900 truncate">
+                          {app.firstName} {app.lastName}
+                        </p>
+                        {app.hasReply && (
+                          <MessageCircle className="w-4 h-4 text-blue-500 fill-blue-100 flex-shrink-0" />
+                        )}
+                      </div>
+                      <p className="text-sm text-gray-500 truncate">{app.jobTitle}</p>
+                      <p className="text-xs text-gray-400 mt-1">{app.createdAt?.toLocaleDateString()}</p>
+                    </div>
+                    <StatusBadge status={app.status} />
+                  </div>
+                </Link>
+              ))
+            )}
+          </div>
+
+          {/* Desktop table view */}
+          <div className="hidden md:block overflow-x-auto">
             <table className="w-full">
               <thead className="bg-gray-50 border-b border-gray-200">
                 <tr>
