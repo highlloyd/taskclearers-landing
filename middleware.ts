@@ -28,11 +28,24 @@ export async function middleware(request: NextRequest) {
   const sessionToken = request.cookies.get('session')?.value;
 
   // If user is authenticated and trying to access login page, redirect to admin
+  // Note: We only check JWT validity here, not session DB validity.
+  // The login page itself will verify the full session and redirect if valid.
+  // This prevents redirect loops when session is deleted but cookie remains.
   if (isPublicPath && sessionToken) {
     try {
       const secret = getJwtSecret();
-      await jwtVerify(sessionToken, secret);
-      // Token is valid, redirect away from login page
+      const { payload } = await jwtVerify(sessionToken, secret);
+
+      // Only redirect if we can verify the session exists
+      // For now, let the login page handle the full validation
+      // to avoid DB calls in middleware on every request
+      if (pathname === '/admin/login') {
+        // Let login page handle session validation to avoid redirect loop
+        return NextResponse.next({
+          request: { headers: requestHeaders },
+        });
+      }
+
       return NextResponse.redirect(new URL('/admin', request.url));
     } catch {
       // Invalid token, let them access the login page
