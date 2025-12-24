@@ -5,9 +5,25 @@ import { db, applications, jobs } from '@/lib/db';
 import { eq } from 'drizzle-orm';
 import { saveFile } from '@/lib/upload';
 import { sendNewApplicationNotification } from '@/lib/email';
-import { checkRateLimit, RATE_LIMITS } from '@/lib/auth/rate-limit';
+import { checkRateLimitAsync, RATE_LIMITS } from '@/lib/auth/rate-limit';
 import { trackEvent, hashIP, getClientIP } from '@/lib/analytics/tracking';
 import { EVENT_TYPES } from '@/lib/analytics';
+
+// Input validation constants
+const MAX_FIELD_LENGTH = 500;
+const MAX_COVER_LETTER_LENGTH = 10000;
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const PHONE_REGEX = /^[+\d\s\-()]{0,30}$/;
+const NANOID_REGEX = /^[A-Za-z0-9_-]{21}$/;
+
+// Sanitize string input to prevent XSS and limit length
+function sanitizeString(input: string | null, maxLength: number): string {
+  if (!input) return '';
+  return input
+    .slice(0, maxLength)
+    .replace(/[<>]/g, '') // Remove basic XSS characters
+    .trim();
+}
 
 export async function POST(request: Request) {
   try {
@@ -17,8 +33,8 @@ export async function POST(request: Request) {
     const realIp = headersList.get('x-real-ip');
     const clientIp = forwardedFor?.split(',')[0]?.trim() || realIp || 'unknown';
 
-    // Check per-IP rate limit
-    const ipRateLimit = checkRateLimit(
+    // Check per-IP rate limit (uses Redis if available)
+    const ipRateLimit = await checkRateLimitAsync(
       `application:${clientIp}`,
       RATE_LIMITS.application
     );
@@ -33,8 +49,8 @@ export async function POST(request: Request) {
       );
     }
 
-    // Check global rate limit (DDoS protection)
-    const globalRateLimit = checkRateLimit(
+    // Check global rate limit (DDoS protection, uses Redis if available)
+    const globalRateLimit = await checkRateLimitAsync(
       'application:global',
       RATE_LIMITS.applicationGlobal
     );
@@ -47,19 +63,60 @@ export async function POST(request: Request) {
 
     const formData = await request.formData();
 
-    const jobId = formData.get('jobId') as string;
-    const firstName = formData.get('firstName') as string;
-    const lastName = formData.get('lastName') as string;
-    const email = formData.get('email') as string;
-    const phone = formData.get('phone') as string;
-    const coverLetter = formData.get('coverLetter') as string;
-    const goodAt = formData.get('goodAt') as string;
+    const jobIdRaw = formData.get('jobId') as string;
+    const firstNameRaw = formData.get('firstName') as string;
+    const lastNameRaw = formData.get('lastName') as string;
+    const emailRaw = formData.get('email') as string;
+    const phoneRaw = formData.get('phone') as string;
+    const coverLetterRaw = formData.get('coverLetter') as string;
+    const goodAtRaw = formData.get('goodAt') as string;
     const resume = formData.get('resume') as File | null;
 
     // Validate required fields
-    if (!jobId || !firstName || !lastName || !email) {
+    if (!jobIdRaw || !firstNameRaw || !lastNameRaw || !emailRaw) {
       return NextResponse.json(
         { error: 'Missing required fields' },
+        { status: 400 }
+      );
+    }
+
+    // Validate job ID format (nanoid format)
+    if (!NANOID_REGEX.test(jobIdRaw)) {
+      return NextResponse.json(
+        { error: 'Invalid job ID format' },
+        { status: 400 }
+      );
+    }
+
+    // Sanitize and validate inputs
+    const jobId = jobIdRaw;
+    const firstName = sanitizeString(firstNameRaw, MAX_FIELD_LENGTH);
+    const lastName = sanitizeString(lastNameRaw, MAX_FIELD_LENGTH);
+    const email = emailRaw.toLowerCase().trim().slice(0, MAX_FIELD_LENGTH);
+    const phone = sanitizeString(phoneRaw, 30);
+    const coverLetter = sanitizeString(coverLetterRaw, MAX_COVER_LETTER_LENGTH);
+    const goodAt = sanitizeString(goodAtRaw, MAX_COVER_LETTER_LENGTH);
+
+    // Validate email format
+    if (!EMAIL_REGEX.test(email)) {
+      return NextResponse.json(
+        { error: 'Invalid email format' },
+        { status: 400 }
+      );
+    }
+
+    // Validate phone format if provided
+    if (phone && !PHONE_REGEX.test(phone)) {
+      return NextResponse.json(
+        { error: 'Invalid phone number format' },
+        { status: 400 }
+      );
+    }
+
+    // Validate name lengths
+    if (firstName.length < 1 || lastName.length < 1) {
+      return NextResponse.json(
+        { error: 'Name fields cannot be empty' },
         { status: 400 }
       );
     }
