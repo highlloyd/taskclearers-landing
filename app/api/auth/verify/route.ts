@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { verifyMagicLinkToken, createSession } from '@/lib/auth';
 import { cookies, headers } from 'next/headers';
-import { checkRateLimit, RATE_LIMITS } from '@/lib/auth/rate-limit';
+import { checkRateLimitAsync, RATE_LIMITS } from '@/lib/auth/rate-limit';
 
 function getClientIp(headersList: Headers): string {
   return (
@@ -16,8 +16,8 @@ export async function POST(request: Request) {
     const headersList = await headers();
     const clientIp = getClientIp(headersList);
 
-    // Check global IP rate limit
-    const ipLimit = checkRateLimit(`ip:${clientIp}`, RATE_LIMITS.globalIp);
+    // Check global IP rate limit (uses Redis if available)
+    const ipLimit = await checkRateLimitAsync(`ip:${clientIp}`, RATE_LIMITS.globalIp);
     if (!ipLimit.success) {
       return NextResponse.json(
         { error: 'Too many requests. Please try again later.' },
@@ -33,8 +33,8 @@ export async function POST(request: Request) {
 
     const normalizedEmail = email.toLowerCase().trim();
 
-    // Check email-specific rate limit for verification attempts
-    const verifyLimit = checkRateLimit(`verify:${normalizedEmail}`, RATE_LIMITS.verify);
+    // Check email-specific rate limit for verification attempts (uses Redis if available)
+    const verifyLimit = await checkRateLimitAsync(`verify:${normalizedEmail}`, RATE_LIMITS.verify);
     if (!verifyLimit.success) {
       return NextResponse.json(
         { error: 'Too many verification attempts. Please request a new code.' },
@@ -55,7 +55,7 @@ export async function POST(request: Request) {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
-      maxAge: 30 * 24 * 60 * 60, // 30 days
+      maxAge: 14 * 24 * 60 * 60, // 14 days (matches SESSION_DURATION_DAYS)
       path: '/',
     });
 

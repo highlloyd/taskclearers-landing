@@ -5,12 +5,16 @@ const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
 export async function sendMagicLinkEmail(email: string, token: string): Promise<void> {
   const adminIdentity = getDefaultIdentity('admin');
 
-  // If no Graph API configured, log the code (for development)
+  // If no Graph API configured, log the code (for development only)
   if (!isGraphConfigured()) {
-    console.log('=== Magic Code (Graph API not configured) ===');
-    console.log(`Email: ${email}`);
-    console.log(`Code: ${token}`);
-    console.log('==============================================');
+    if (process.env.NODE_ENV === 'development') {
+      console.log('=== Magic Code (Graph API not configured) ===');
+      console.log(`Email: ${email}`);
+      console.log(`Code: ${token}`);
+      console.log('==============================================');
+    } else {
+      console.warn('WARNING: Graph API not configured. Magic link email could not be sent.');
+    }
     return;
   }
 

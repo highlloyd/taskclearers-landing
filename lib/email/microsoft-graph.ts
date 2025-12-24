@@ -85,6 +85,13 @@ interface GraphEmailOptions {
   saveToSentItems?: boolean;
 }
 
+// Sanitize email header fields to prevent CRLF injection attacks
+function sanitizeHeaderField(value: string): string {
+  if (!value) return '';
+  // Remove any CR, LF, and null bytes that could be used for header injection
+  return value.replace(/[\r\n\0]/g, '').trim();
+}
+
 interface GraphTokenCache {
   accessToken: string;
   expiresAt: number;
@@ -155,9 +162,14 @@ export async function sendEmailViaGraph(options: GraphEmailOptions): Promise<{ m
 
   const accessToken = await getAccessToken();
 
+  // Sanitize header fields to prevent CRLF injection
+  const sanitizedSubject = sanitizeHeaderField(options.subject);
+  const sanitizedFromName = sanitizeHeaderField(fromName || '');
+  const sanitizedTo = sanitizeHeaderField(options.to);
+
   const emailPayload = {
     message: {
-      subject: options.subject,
+      subject: sanitizedSubject,
       body: {
         contentType: 'HTML',
         content: options.body,
@@ -165,14 +177,14 @@ export async function sendEmailViaGraph(options: GraphEmailOptions): Promise<{ m
       toRecipients: [
         {
           emailAddress: {
-            address: options.to,
+            address: sanitizedTo,
           },
         },
       ],
       from: {
         emailAddress: {
           address: fromEmail,
-          name: fromName,
+          name: sanitizedFromName,
         },
       },
     },

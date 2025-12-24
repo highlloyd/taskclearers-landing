@@ -2,9 +2,14 @@ import { NextRequest, NextResponse } from 'next/server';
 import { db, emailTemplates, applications, jobs } from '@/lib/db';
 import { eq } from 'drizzle-orm';
 import { renderEmailTemplate, getTemplateData } from '@/lib/email/templates';
+import { requirePermission } from '@/lib/auth/require-permission';
+import { PERMISSIONS } from '@/lib/auth/permissions';
 
 // POST /api/admin/email-templates/preview - Render template with application data
 export async function POST(request: NextRequest) {
+  const { error } = await requirePermission(PERMISSIONS.SEND_EMAILS);
+  if (error) return error;
+
   try {
     const body = await request.json();
     const { templateId, applicationId, subject, body: templateBody } = body;

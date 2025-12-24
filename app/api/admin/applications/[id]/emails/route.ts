@@ -186,20 +186,24 @@ export async function POST(request: Request, context: Context) {
         from: result.from,
       });
     } catch (sendError) {
-      // Update email status to failed
-      const errorMessage = sendError instanceof Error ? sendError.message : 'Unknown error';
+      // Log full error server-side for debugging
+      console.error('Failed to send email:', sendError);
+
+      // Get full error message for logging, but sanitize for storage/client
+      const fullErrorMessage = sendError instanceof Error ? sendError.message : 'Unknown error';
+      // Store a sanitized version that doesn't leak API details
+      const sanitizedError = 'Email delivery failed. Please try again or contact support.';
 
       await db
         .update(sentEmails)
         .set({
           status: 'failed',
-          errorMessage,
+          errorMessage: sanitizedError,
         })
         .where(eq(sentEmails.id, emailId));
 
-      console.error('Failed to send email:', sendError);
       return NextResponse.json(
-        { error: 'Failed to send email', details: errorMessage },
+        { error: 'Failed to send email', details: sanitizedError },
         { status: 500 }
       );
     }

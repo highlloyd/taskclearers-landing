@@ -54,13 +54,23 @@ export async function GET(request: Request, context: Context) {
       return NextResponse.json({ error: 'Employee not found' }, { status: 404 });
     }
 
-    // Parse JSON fields
+    // Parse JSON fields with error handling
+    const safeJsonParse = (value: string | null): unknown => {
+      if (!value) return null;
+      try {
+        return JSON.parse(value);
+      } catch {
+        console.error('Failed to parse JSON field in employee record');
+        return null;
+      }
+    };
+
     const parsedEmployee = {
       ...employee,
-      salary: employee.salary ? JSON.parse(employee.salary) : null,
-      benefits: employee.benefits ? JSON.parse(employee.benefits) : null,
-      address: employee.address ? JSON.parse(employee.address) : null,
-      emergencyContact: employee.emergencyContact ? JSON.parse(employee.emergencyContact) : null,
+      salary: safeJsonParse(employee.salary),
+      benefits: safeJsonParse(employee.benefits),
+      address: safeJsonParse(employee.address),
+      emergencyContact: safeJsonParse(employee.emergencyContact),
     };
 
     return NextResponse.json(parsedEmployee);
@@ -119,9 +129,14 @@ export async function PATCH(request: Request, context: Context) {
           updates[field] = newValue;
 
           // For activity log, use readable values
-          const logOldValue = ['salary', 'benefits', 'address', 'emergencyContact'].includes(field)
-            ? (oldValue ? JSON.parse(oldValue as string) : null)
-            : oldValue;
+          let logOldValue = oldValue;
+          if (['salary', 'benefits', 'address', 'emergencyContact'].includes(field) && oldValue) {
+            try {
+              logOldValue = JSON.parse(oldValue as string);
+            } catch {
+              logOldValue = null;
+            }
+          }
           const logNewValue = body[field];
 
           // Special handling for status changes

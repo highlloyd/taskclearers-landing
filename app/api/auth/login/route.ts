@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { createMagicLinkToken, isValidAdminEmail } from '@/lib/auth';
 import { sendMagicLinkEmail } from '@/lib/email';
-import { checkRateLimit, RATE_LIMITS } from '@/lib/auth/rate-limit';
+import { checkRateLimitAsync, RATE_LIMITS } from '@/lib/auth/rate-limit';
 import { headers } from 'next/headers';
 
 function getClientIp(headersList: Headers): string {
@@ -17,8 +17,8 @@ export async function POST(request: Request) {
     const headersList = await headers();
     const clientIp = getClientIp(headersList);
 
-    // Check global IP rate limit
-    const ipLimit = checkRateLimit(`ip:${clientIp}`, RATE_LIMITS.globalIp);
+    // Check global IP rate limit (uses Redis if available)
+    const ipLimit = await checkRateLimitAsync(`ip:${clientIp}`, RATE_LIMITS.globalIp);
     if (!ipLimit.success) {
       return NextResponse.json(
         { error: 'Too many requests. Please try again later.' },
@@ -41,8 +41,8 @@ export async function POST(request: Request) {
       );
     }
 
-    // Check email-specific rate limit
-    const emailLimit = checkRateLimit(`login:${normalizedEmail}`, RATE_LIMITS.login);
+    // Check email-specific rate limit (uses Redis if available)
+    const emailLimit = await checkRateLimitAsync(`login:${normalizedEmail}`, RATE_LIMITS.login);
     if (!emailLimit.success) {
       return NextResponse.json(
         { error: 'Too many login attempts. Please try again later.' },

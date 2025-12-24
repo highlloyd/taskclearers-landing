@@ -2,9 +2,14 @@ import { NextRequest, NextResponse } from 'next/server';
 import { db, emailTemplates } from '@/lib/db';
 import { eq } from 'drizzle-orm';
 import { nanoid } from 'nanoid';
+import { requirePermission } from '@/lib/auth/require-permission';
+import { PERMISSIONS } from '@/lib/auth/permissions';
 
 // GET /api/admin/email-templates - List all active templates
 export async function GET() {
+  const { error } = await requirePermission(PERMISSIONS.SEND_EMAILS);
+  if (error) return error;
+
   try {
     const templates = await db
       .select()
@@ -21,6 +26,9 @@ export async function GET() {
 
 // POST /api/admin/email-templates - Create new template
 export async function POST(request: NextRequest) {
+  const { error } = await requirePermission(PERMISSIONS.SEND_EMAILS);
+  if (error) return error;
+
   try {
     const body = await request.json();
     const { name, subject, body: templateBody, triggerStatus } = body;
