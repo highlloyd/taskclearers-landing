@@ -7,6 +7,7 @@ terraform {
     skip_metadata_api_check     = true
     skip_region_validation      = true
     skip_requesting_account_id  = true
+    skip_s3_checksum            = true
     use_path_style              = true
   }
 
@@ -74,8 +75,8 @@ resource "nomad_variable" "taskclearers_secrets" {
     azure_client_id     = data.sops_file.secrets.data["azure_client_id"]
     azure_tenant_id     = data.sops_file.secrets.data["azure_tenant_id"]
     azure_client_secret = data.sops_file.secrets.data["azure_client_secret"]
-    aws_access_key_id     = var.aws_access_key_id
-    aws_secret_access_key = var.aws_secret_access_key
+    aws_access_key_id     = data.sops_file.secrets.data["r2_access_key_id"]
+    aws_secret_access_key = data.sops_file.secrets.data["r2_secret_access_key"]
   }
 }
 
@@ -103,7 +104,7 @@ resource "nomad_job" "taskclearers" {
     admin_email_domain  = var.admin_email_domain
     notification_email  = var.notification_email
     o365_shared_mailbox = var.o365_shared_mailbox
-    aws_endpoint_url_s3 = var.aws_endpoint_url_s3
+    r2_account_id       = data.sops_file.secrets.data["r2_account_id"]
     r2_bucket_name      = var.r2_bucket_name
     email_admin         = var.email_admin
     email_admin_name    = var.email_admin_name

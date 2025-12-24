@@ -25,23 +25,19 @@ variable "o365_shared_mailbox" {
 }
 
 # R2/S3 Storage Configuration
+# Note: aws_access_key_id and aws_secret_access_key are used for Terraform S3 backend
+# The application's R2 credentials are loaded from SOPS secrets (r2_access_key_id, r2_secret_access_key)
 variable "aws_access_key_id" {
-  description = "AWS/R2 Access Key ID"
+  description = "AWS/R2 Access Key ID (for Terraform S3 backend)"
   type        = string
   sensitive   = true
   default     = ""
 }
 
 variable "aws_secret_access_key" {
-  description = "AWS/R2 Secret Access Key"
+  description = "AWS/R2 Secret Access Key (for Terraform S3 backend)"
   type        = string
   sensitive   = true
-  default     = ""
-}
-
-variable "aws_endpoint_url_s3" {
-  description = "R2/S3 Endpoint URL"
-  type        = string
   default     = ""
 }
 

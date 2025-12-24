@@ -12,6 +12,9 @@ job "taskclearers" {
       port "http" {
         to = 3000
       }
+      port "redis" {
+        to = 6379
+      }
     }
 
     service {
@@ -75,8 +78,11 @@ tags = [
         O365_SHARED_MAILBOX  = "${o365_shared_mailbox}"
         NEXT_PUBLIC_BASE_URL = "https://taskclearers.com"
 
+        # Redis for distributed rate limiting (connects to sidecar)
+        REDIS_URL = "redis://localhost:6379"
+
         # R2 Storage (non-sensitive)
-        AWS_ENDPOINT_URL_S3 = "${aws_endpoint_url_s3}"
+        AWS_ENDPOINT_URL_S3 = "https://${r2_account_id}.r2.cloudflarestorage.com"
         R2_BUCKET_NAME      = "${r2_bucket_name}"
         AWS_REGION          = "auto"
 
@@ -108,6 +114,27 @@ tags = [
       resources {
         cpu    = 1000
         memory = 1024
+      }
+    }
+
+    # Redis sidecar for distributed rate limiting
+    task "redis" {
+      driver = "docker"
+
+      lifecycle {
+        hook    = "prestart"
+        sidecar = true
+      }
+
+      config {
+        image = "redis:7-alpine"
+        ports = ["redis"]
+        args  = ["--maxmemory", "64mb", "--maxmemory-policy", "allkeys-lru"]
+      }
+
+      resources {
+        cpu    = 100
+        memory = 128
       }
     }
   }
