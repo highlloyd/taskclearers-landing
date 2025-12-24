@@ -14,13 +14,6 @@ job "taskclearers" {
       }
     }
 
-    # Host volume for persistent data (configured on Nomad server)
-    volume "data" {
-      type      = "host"
-      source    = "taskclearers-data"
-      read_only = false
-    }
-
     service {
       name     = "taskclearers"
       port     = "http"
@@ -68,15 +61,9 @@ tags = [
       driver = "docker"
 
       config {
-        image = "localhost:5000/taskclearers:${image_tag}"
-        ports = ["http"]
-      }
-
-      # Mount the host volume
-      volume_mount {
-        volume      = "data"
-        destination = "/app/data"
-        read_only   = false
+        image   = "localhost:5000/taskclearers:${image_tag}"
+        ports   = ["http"]
+        volumes = ["/opt/data/taskclearers:/app/data"]
       }
 
       # Non-sensitive environment variables

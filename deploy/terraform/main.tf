@@ -38,10 +38,9 @@ data "external" "app_version" {
   program = ["bash", "${path.module}/get_app_version.sh"]
 }
 
-# Set up host volume on the Nomad server (runs once)
-# NOTE: host_volume config is already in /etc/nomad.d/nomad.hcl on the server
-# This resource just ensures the data directory exists with correct permissions
-resource "null_resource" "setup_host_volume" {
+# Ensure data directory exists with correct permissions
+# Uses /opt/data/<job-name> convention per infrastructure standards
+resource "null_resource" "setup_data_dir" {
   triggers = {
     server_ip = var.server_ip
   }
@@ -49,18 +48,9 @@ resource "null_resource" "setup_host_volume" {
   provisioner "remote-exec" {
     inline = [
       "echo '[terraform] Setting up data directory for TaskClearers...'",
-
-      # Create data directory with correct ownership
-      "mkdir -p /opt/taskclearers/data",
-      "chown 1001:1001 /opt/taskclearers/data",
-      "chmod 755 /opt/taskclearers/data",
-
-      # Migrate data from Docker volume if exists and host dir is empty
-      "if [ -d /var/lib/docker/volumes/taskclearers-data/_data ] && [ ! -f /opt/taskclearers/data/taskclearers.db ]; then echo '[terraform] Migrating data from Docker volume...'; cp -r /var/lib/docker/volumes/taskclearers-data/_data/* /opt/taskclearers/data/ 2>/dev/null || true; chown -R 1001:1001 /opt/taskclearers/data; fi",
-
-      # Verify host_volume is configured in Nomad
-      "grep -q 'host_volume \"taskclearers-data\"' /etc/nomad.d/nomad.hcl && echo '[terraform] Host volume configured in Nomad' || echo '[terraform] WARNING: host_volume not found in /etc/nomad.d/nomad.hcl'",
-
+      "mkdir -p /opt/data/taskclearers",
+      "chown 1001:1001 /opt/data/taskclearers",
+      "chmod 755 /opt/data/taskclearers",
       "echo '[terraform] Data directory setup complete'"
     ]
 
@@ -74,7 +64,7 @@ resource "null_resource" "setup_host_volume" {
 
 # Store secrets in Nomad Variables (secure - not visible in job spec)
 resource "nomad_variable" "taskclearers_secrets" {
-  depends_on = [null_resource.setup_host_volume]
+  depends_on = [null_resource.setup_data_dir]
 
   path      = "nomad/jobs/taskclearers"
   namespace = "default"
@@ -103,7 +93,7 @@ resource "null_resource" "build_and_push" {
 # Deploy the Nomad job
 resource "nomad_job" "taskclearers" {
   depends_on = [
-    null_resource.setup_host_volume,
+    null_resource.setup_data_dir,
     null_resource.build_and_push,
     nomad_variable.taskclearers_secrets
   ]
