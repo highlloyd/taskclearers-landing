@@ -45,3 +45,9 @@ deploy/*.vars
 deploy/*.yaml
 !deploy/*.enc.yaml
 deploy/.decrypted~*
+
+# Terraform
+deploy/terraform/.terraform/providers/
+deploy/terraform/.terraform/terraform.tfstate
+deploy/terraform/*.tfstate
+deploy/terraform/errored.tfstate
