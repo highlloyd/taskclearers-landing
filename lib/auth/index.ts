@@ -11,17 +11,21 @@ import {
 
 export type AdminUser = typeof adminUsers.$inferSelect;
 
-// JWT secret must be set in production
+// JWT secret must be set in production and staging
 function getJwtSecret(): Uint8Array {
   const secret = process.env.JWT_SECRET;
-  if (!secret && process.env.NODE_ENV === 'production') {
-    throw new Error('JWT_SECRET environment variable is required in production');
+  // Require JWT_SECRET in production and staging environments
+  if (!secret && (process.env.NODE_ENV === 'production' || process.env.VERCEL_ENV === 'preview')) {
+    throw new Error('JWT_SECRET environment variable is required in production and staging');
+  }
+  if (!secret) {
+    console.warn('WARNING: Using development JWT secret. Do not use in production!');
   }
   return new TextEncoder().encode(secret || 'dev-secret-not-for-production');
 }
 
 const ADMIN_EMAIL_DOMAIN = process.env.ADMIN_EMAIL_DOMAIN || 'taskclearers.com';
-const SESSION_DURATION_DAYS = 30;
+const SESSION_DURATION_DAYS = 14; // Reduced from 30 for better security
 const TOKEN_LENGTH = 8; // Alphanumeric token length
 const TOKEN_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // Excludes confusing chars: 0, O, I, 1
 

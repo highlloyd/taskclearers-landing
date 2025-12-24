@@ -1,22 +1,79 @@
-// Simple in-memory rate limiter
-// In production, consider using Redis for distributed rate limiting
+// Rate limiter with Redis support for distributed deployments
+// Falls back to in-memory for development/single-instance deployments
+
+import Redis from 'ioredis';
 
 interface RateLimitEntry {
   count: number;
   resetAt: number;
 }
 
-const store = new Map<string, RateLimitEntry>();
+// Redis client singleton
+let redisClient: Redis | null = null;
+let redisAvailable = false;
 
-// Clean up expired entries periodically
+function getRedisClient(): Redis | null {
+  if (redisClient) return redisClient;
+
+  const redisUrl = process.env.REDIS_URL;
+  if (!redisUrl) {
+    if (process.env.NODE_ENV === 'production') {
+      console.warn('WARNING: REDIS_URL not configured. Rate limiting will use in-memory store (not recommended for multi-instance deployments).');
+    }
+    return null;
+  }
+
+  try {
+    redisClient = new Redis(redisUrl, {
+      maxRetriesPerRequest: 3,
+      retryStrategy(times) {
+        if (times > 3) return null; // Stop retrying after 3 attempts
+        return Math.min(times * 100, 3000);
+      },
+      lazyConnect: true,
+    });
+
+    redisClient.on('connect', () => {
+      redisAvailable = true;
+      console.log('Redis connected for rate limiting');
+    });
+
+    redisClient.on('error', (err) => {
+      console.error('Redis error:', err.message);
+      redisAvailable = false;
+    });
+
+    redisClient.on('close', () => {
+      redisAvailable = false;
+    });
+
+    // Attempt connection
+    redisClient.connect().catch(() => {
+      redisAvailable = false;
+    });
+
+    return redisClient;
+  } catch (err) {
+    console.error('Failed to initialize Redis client:', err);
+    return null;
+  }
+}
+
+// Initialize Redis on module load
+getRedisClient();
+
+// Fallback in-memory store for development or Redis failures
+const memoryStore = new Map<string, RateLimitEntry>();
+
+// Clean up expired entries periodically (in-memory fallback only)
 setInterval(() => {
   const now = Date.now();
-  store.forEach((entry, key) => {
+  memoryStore.forEach((entry, key) => {
     if (entry.resetAt < now) {
-      store.delete(key);
+      memoryStore.delete(key);
     }
   });
-}, 60000); // Clean up every minute
+}, 60000);
 
 export interface RateLimitConfig {
   maxAttempts: number;
@@ -29,16 +86,70 @@ export interface RateLimitResult {
   resetAt: number;
 }
 
-export function checkRateLimit(
+// Redis-based rate limit check
+async function checkRateLimitRedis(
+  key: string,
+  config: RateLimitConfig
+): Promise<RateLimitResult> {
+  const redis = getRedisClient();
+  if (!redis || !redisAvailable) {
+    return checkRateLimitMemory(key, config);
+  }
+
+  try {
+    const now = Date.now();
+    const redisKey = `ratelimit:${key}`;
+    const windowSecs = Math.ceil(config.windowMs / 1000);
+
+    // Use Redis MULTI for atomic operations
+    const pipeline = redis.multi();
+    pipeline.incr(redisKey);
+    pipeline.pttl(redisKey);
+
+    const results = await pipeline.exec();
+    if (!results) {
+      return checkRateLimitMemory(key, config);
+    }
+
+    const [[, count], [, ttl]] = results as [[null, number], [null, number]];
+
+    // Set expiry if this is a new key (ttl = -1 means no expiry set)
+    if (ttl === -1) {
+      await redis.pexpire(redisKey, config.windowMs);
+    }
+
+    const resetAt = ttl > 0 ? now + ttl : now + config.windowMs;
+
+    if (count > config.maxAttempts) {
+      return {
+        success: false,
+        remaining: 0,
+        resetAt,
+      };
+    }
+
+    return {
+      success: true,
+      remaining: config.maxAttempts - count,
+      resetAt,
+    };
+  } catch (err) {
+    console.error('Redis rate limit error, falling back to memory:', err);
+    return checkRateLimitMemory(key, config);
+  }
+}
+
+// In-memory rate limit check (fallback)
+function checkRateLimitMemory(
   key: string,
   config: RateLimitConfig
 ): RateLimitResult {
   const now = Date.now();
-  const entry = store.get(key);
+  const entry = memoryStore.get(key);
 
   // If no entry or expired, create new one
   if (!entry || entry.resetAt < now) {
-    store.set(key, {
+    memoryStore.set(key, {
       count: 1,
       resetAt: now + config.windowMs,
     });
@@ -65,6 +176,25 @@ export function checkRateLimit(
     remaining: config.maxAttempts - entry.count,
     resetAt: entry.resetAt,
   };
+}
+
+// Synchronous wrapper for backward compatibility
+// Uses async internally but provides sync interface
+export function checkRateLimit(
+  key: string,
+  config: RateLimitConfig
+): RateLimitResult {
+  // For synchronous contexts, always use memory store
+  // The async version should be used in API routes
+  return checkRateLimitMemory(key, config);
+}
+
+// Async version for API routes (preferred)
+export async function checkRateLimitAsync(
+  key: string,
+  config: RateLimitConfig
+): Promise<RateLimitResult> {
+  return checkRateLimitRedis(key, config);
 }
 
 // Rate limit configurations
